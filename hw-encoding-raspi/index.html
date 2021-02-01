@@ -14,11 +14,11 @@
     
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="V4L2 and Hardware Encoding on the Raspberry Pi"/>
-<meta name="twitter:description" content="TLDR: Explain how the V4L2 M2M API works through use use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
+<meta name="twitter:description" content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
 Background My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi."/>
 
     <meta property="og:title" content="V4L2 and Hardware Encoding on the Raspberry Pi" />
-<meta property="og:description" content="TLDR: Explain how the V4L2 M2M API works through use use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
+<meta property="og:description" content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
 Background My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/hw-encoding-raspi/" />
@@ -81,15 +81,15 @@ Background My journey started at this video on the excellent Craft Computing You
       </div>
     </header>
     <div class="post-content">
-      <p><strong>TLDR</strong>: Explain how the V4L2 M2M API works through use use-case of implementing hardware video encoding on
+      <p><strong>TLDR</strong>: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on
 the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding
 and encoding on Linux.</p>
 <h1 id="background">Background</h1>
 <p>My journey started at <a href="https://www.youtube.com/watch?v=CyEpshm16HY&amp;t=139s">this video</a>
 on the excellent <a href="https://www.youtube.com/channel/UCp3yVOm6A55nx65STpm3tXQ">Craft Computing</a> YouTube channel
 which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi.
-Behind the scenes, TinyPilot uses <a href="https://github.com/pikvm/ustreamer">ustreamer</a> to reads frames
-from a HDMI capture card and either exposes it over HTTP or write it to shared memory. Along with the
+Behind the scenes, TinyPilot uses <a href="https://github.com/pikvm/ustreamer">ustreamer</a> to read frames
+from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the
 MJPEG output, support was recently added for encoding video using H264.</p>
 <p>Even after messing with the source code, I could not get the H264 encoding working on my Pi running
 64-bit Ubuntu with an error message of <code>Can't create MMAL wrapper</code>. Digging further, I ran into some
@@ -105,7 +105,8 @@ Pi&rsquo;s Broadcom chip:</p>
 <li>Support was dropped by Broadcom a long time ago and there appears to be
 <a href="https://github.com/raspberrypi/Raspberry-Pi-OS-64bit/issues/98#issuecomment-715321951">no hope of it</a>
 ever working on 64-bit OSes.</li>
-<li>ustreamer uses this API to perform MJPEG encoding when specifically requested by the user.</li>
+<li>ustreamer <a href="https://github.com/pikvm/ustreamer/blob/master/src/ustreamer/encoders/omx/encoder.c">uses this API</a>
+to perform MJPEG encoding when specifically requested by the user.</li>
 </ul>
 <ol start="2">
 <li><strong>Multimedia Abstraction Layer (MMAL)</strong></li>
@@ -118,7 +119,8 @@ ever working on 64-bit OSes.</li>
 it was subsequently
 <a href="https://github.com/raspberrypi/userland/commit/f97b1af1b3e653f9da2c1a3643479bfd469e3b74">reverted</a> and,
 currently, does not work.</li>
-<li>ustreamer uses this API to perform H264 encoding to shared memory.</li>
+<li>ustreamer uses <a href="https://github.com/pikvm/ustreamer/blob/master/src/ustreamer/h264/encoder.c">this API</a>
+to perform H264 encoding to shared memory.</li>
 </ul>
 <ol start="3">
 <li><strong>Video4Linux2 Memory to Memory (V4L2 M2M)</strong></li>
@@ -145,7 +147,7 @@ to support it.</p>
 &ldquo;output&rdquo; (frames being sent to a device e.g. a graphics card) M2M combines &ldquo;capture&rdquo; and
 &ldquo;output&rdquo; into a single mode which allows arbitrary transformations of frames. Video encoding is the
 obvious example of this but decoding is also supported.</p>
-<p>TODO create a graphic here demonstrating this.</p>
+<p><img src="/img/hw-encoding-raspi/v4l2.png" alt="Diagram for V4L2 APIs"></p>
 <p>All communication with the hardware encoder on the Pi is done by opening a special device in
 <code>/dev</code> (<code>/dev/video11</code> to be precise), performing <code>ioctls</code> on the file descriptor to control the
 encoding and using mmap-ed memory to pass the frames between userspace and kernelspace.</p>
@@ -249,7 +251,7 @@ ioctl(fd, VIDIOC_STREAMON, <span style="color:#f92672">&amp;</span>type);
 <li>dequeue a capture frame, read the encoded frame and queue it again.</li>
 </ul>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">// Assumed functions for reading a raw frame and writing an encoded frame.
-</span><span style="color:#75715e">// Depending on application this can be from a file, a device or somewhere else.
+</span><span style="color:#75715e">// Depending on application this can be from a file, a device or anywhere else.
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">read_raw</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> buf, size_t len);
 <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">write_encoded</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> buf, size_t len);
 
@@ -287,7 +289,7 @@ ioctl(fd, VIDIOC_STREAMON, <span style="color:#f92672">&amp;</span>type);
 <li>The kernel documentation had some excellent high-level explanations about how the API worked
 <ul>
 <li>Specifically <a href="https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-encoder.html">this docs page</a>
-was an exceptional resource as tt lays out all the steps needed to perform encoding</li>
+was an exceptional resource as it lays out all the steps needed to perform encoding</li>
 <li>Unfortunately, it only rarely provides code samples so a lot of trial and error was still needed.</li>
 </ul>
 </li>
@@ -303,12 +305,12 @@ with the kernel sources.
 <li>This would have saved a bunch of time if I&rsquo;d known this at the start</li>
 </ul>
 </li>
-<li>Looking at strace of ffmpeg trying to encode the same video as my program allowed me to see if there was
+<li>Looking at <code>strace</code> of ffmpeg trying to encode the same video as my program allowed me to see if there was
 any hidden or different syscalls.
 <ul>
 <li>Instead of an explicit error being returned, I would sometimes end up being unable to dequeue a capture or
 output frame, hanging ustreamer.</li>
-<li>This several times including when I had not set a required field in a setup ioctl and I had
+<li>This included several times when I had missed a required field in a setup ioctl and when I had
 messed up the order of the queue/dequeue loop.</li>
 </ul>
 </li>

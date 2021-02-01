@@ -12,7 +12,7 @@
       <pubDate>Mon, 01 Feb 2021 00:54:02 +0000</pubDate>
       
       <guid>/hw-encoding-raspi/</guid>
-      <description>TLDR: Explain how the V4L2 M2M API works through use use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
+      <description>TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
 Background My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi.</description>
     </item>
     
