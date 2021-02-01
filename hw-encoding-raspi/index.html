@@ -85,7 +85,8 @@ Background My journey started at this video on the excellent Craft Computing You
 the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding
 and encoding on Linux.</p>
 <h1 id="background">Background</h1>
-<p>My journey started at <a href="">this video</a> on the excellent <a href="">Craft Computing</a> YouTube channel
+<p>My journey started at <a href="https://www.youtube.com/watch?v=CyEpshm16HY&amp;t=139s">this video</a>
+on the excellent <a href="https://www.youtube.com/channel/UCp3yVOm6A55nx65STpm3tXQ">Craft Computing</a> YouTube channel
 which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi.
 Behind the scenes, TinyPilot uses <a href="https://github.com/pikvm/ustreamer">ustreamer</a> to reads frames
 from a HDMI capture card and either exposes it over HTTP or write it to shared memory. Along with the
@@ -101,8 +102,9 @@ Pi&rsquo;s Broadcom chip:</p>
 </ol>
 <ul>
 <li>This API came directly from Broadcom and was the original way to access hardware codecs.</li>
-<li>Support was dropped by Broadcom a long time ago and there appears to be <a href="">no hope of it</a> ever
-working on 64-bit OSes.</li>
+<li>Support was dropped by Broadcom a long time ago and there appears to be
+<a href="https://github.com/raspberrypi/Raspberry-Pi-OS-64bit/issues/98#issuecomment-715321951">no hope of it</a>
+ever working on 64-bit OSes.</li>
 <li>ustreamer uses this API to perform MJPEG encoding when specifically requested by the user.</li>
 </ul>
 <ol start="2">
@@ -111,7 +113,10 @@ working on 64-bit OSes.</li>
 <ul>
 <li>This API was developed by the Pi developers as a replacement for OpenMAX and backs tools like
 <code>raspistill</code> and <code>raspivid</code>.</li>
-<li>While support for 64-bit was added <a href="">at one point</a>, it was subsequently <a href="">rolled back</a> and,
+<li>While support for 64-bit was added
+<a href="https://github.com/raspberrypi/userland/commit/7d3c6b9f4c3ddeecefdeb2b882bada74a235249b">at one point</a>,
+it was subsequently
+<a href="https://github.com/raspberrypi/userland/commit/f97b1af1b3e653f9da2c1a3643479bfd469e3b74">reverted</a> and,
 currently, does not work.</li>
 <li>ustreamer uses this API to perform H264 encoding to shared memory.</li>
 </ul>
@@ -121,8 +126,8 @@ currently, does not work.</li>
 <ul>
 <li>V4L2 is Linux API which was historically used for video capture and output. In 2010, the M2M API
 was added, significantly extending V4L2 and adding support for video codecs.</li>
-<li>The Raspberry Pi kernel <a href="">has a driver</a> which uses MMAL APIs in kernelspace and integrates with
-the rest of V4L2.</li>
+<li>The Raspberry Pi kernel <a href="https://github.com/raspberrypi/linux/blob/rpi-5.11.y/drivers/staging/vc04_services/bcm2835-codec/bcm2835-v4l2-codec.c">has a driver</a>
+which uses MMAL APIs in kernelspace and integrates with the rest of V4L2.</li>
 <li>Since this is just a generic kernel API, it works out of the box on 64-bit OSes with programs
 including ffmpeg using it.</li>
 </ul>
@@ -133,7 +138,8 @@ using Linux kernel APIs, this should also futureproof this code to any new revis
 only the big projects like GStreamer and ffmpeg use it for encoding. This meant there was no simple guide
 or example I could follow. However, with a lot of poring over kernel documentation and
 trial and error, I learnt enough to successfully perform H264 hardware encoding using V4L2 and
-<a href="">modified ustreamer</a> to support it.</p>
+<a href="https://github.com/LalitMaganti/ustreamer/commit/a14822a03da74c429928060d99a06e7a0a39d030">modified ustreamer</a>
+to support it.</p>
 <h1 id="using-v4l2-step-by-step">Using V4L2: step by step</h1>
 <p>Generally, V4L2 works in either &ldquo;capture&rdquo; (frames being read off a device e.g. camera or webcam) or
 &ldquo;output&rdquo; (frames being sent to a device e.g. a graphics card) M2M combines &ldquo;capture&rdquo; and
@@ -285,7 +291,7 @@ was an exceptional resource as tt lays out all the steps needed to perform encod
 <li>Unfortunately, it only rarely provides code samples so a lot of trial and error was still needed.</li>
 </ul>
 </li>
-<li>The <a href="">kernel source</a> was invaluable to figure out why error codes were being returned.
+<li>The <a href="https://github.com/raspberrypi/linux/blob/rpi-5.11.y/drivers/staging/vc04_services/bcm2835-codec/bcm2835-v4l2-codec.c">kernel source</a> was invaluable to figure out why error codes were being returned.
 <ul>
 <li>An <code>ENOSYS</code> error code is not helpful when the it is implementation specific&hellip;</li>
 </ul>
