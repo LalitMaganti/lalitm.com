@@ -12,7 +12,7 @@
       
       <guid>/page/about/</guid>
       <description>I&amp;rsquo;m a software engineer working at Google on Perfetto, the next generation performance tracing framework used by Chrome and Android. My main work is with the trace processor, a C++ library that ingests traces and exposes an SQL interface for querying events.
-In my spare time, I tinker with projects from a variety of software engineering domains and write endless (largely unreleased) personal projects. I also play copious amounts of chess and have a long term goal of earning a title.</description>
+In my spare time, I tinker with projects from a variety of software engineering domains and write endless (largely unreleased) personal projects. I also play copious amounts of chess.</description>
     </item>
     
   </channel>

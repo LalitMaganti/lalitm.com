@@ -4,7 +4,7 @@
     <title>V4L2 and Hardware Encoding on the Raspberry Pi // Lalit Maganti</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.83.1" />
+    <meta name="generator" content="Hugo 0.102.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Lalit Maganti" />
     <meta name="description" content="" />
@@ -32,8 +32,8 @@ Background My journey started at this video on the excellent Craft Computing You
 Background My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/hw-encoding-raspi/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-02-01T23:00:00&#43;00:00" />
-<meta property="article:modified_time" content="2021-02-01T23:00:00&#43;00:00" />
+<meta property="article:published_time" content="2021-02-01T23:00:00+00:00" />
+<meta property="article:modified_time" content="2021-02-01T23:00:00+00:00" />
 
 
 
@@ -169,132 +169,132 @@ encoded frame.</p>
 <p><em>Note: all error handling is omitted to make the code snippets smaller.</em></p>
 <h2 id="setup">Setup</h2>
 <p>First, we open the special device for the video encoder. This gives an fd we can use for <code>ioctls</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;linux/videodev2.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">int</span> fd <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#34;/dev/video11&#34;</span>, O_RDWR);
-</code></pre></div><p>Next, we setup the &ldquo;output&rdquo; and &ldquo;capture&rdquo; devices; the most important things to set are resolution
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;linux/videodev2.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> fd <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#34;/dev/video11&#34;</span>, O_RDWR);
+</span></span></code></pre></div><p>Next, we setup the &ldquo;output&rdquo; and &ldquo;capture&rdquo; devices; the most important things to set are resolution
 and pixel format. The &ldquo;capture&rdquo; device will be implicitly set to produce H264 frames with the same
 pixel format as the output but the resolution needs to be set manually.</p>
 <p><em>Note: confusingly &ldquo;output&rdquo; here refers to the raw frames being encoded and &ldquo;capture&rdquo; to the encoded H264
 output frames. A good way to think about this is to consider how V4L2 was originally designed:
 frames are sent to output devices like graphics cards and read from capture devices like cameras.</em></p>
 <p>For 1080p raw frames in <a href="">YUYV format</a>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_format</span> fm;
-<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_pix_format_mplane</span> <span style="color:#f92672">*</span>mp <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>fm.fmt.pix_mp;
-
-fm.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-ioctl(fd, VIDIOC_G_FMT, <span style="color:#f92672">&amp;</span>fm);
-
-mp<span style="color:#f92672">-&gt;</span>width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1920</span>;
-mp<span style="color:#f92672">-&gt;</span>height <span style="color:#f92672">=</span> <span style="color:#ae81ff">1080</span>;
-mp<span style="color:#f92672">-&gt;</span>pixelformat <span style="color:#f92672">=</span> V4L2_PIX_FMT_YUYV;
-ioctl(fd, VIDIOC_S_FMT, <span style="color:#f92672">&amp;</span>fm);
-
-fm.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-ioctl(fd, VIDIOC_G_FMT, <span style="color:#f92672">&amp;</span>fm);
-
-mp<span style="color:#f92672">-&gt;</span>width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1920</span>;
-mp<span style="color:#f92672">-&gt;</span>height <span style="color:#f92672">=</span> <span style="color:#ae81ff">1080</span>;
-ioctl(fd, VIDIOC_S_FMT, <span style="color:#f92672">&amp;</span>fm);
-</code></pre></div><p>Now, we set the inter-frame interval to indirectly set the frame rate. For a 30FPS video:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_streamparm</span> stream;
-memset(<span style="color:#f92672">&amp;</span>stream, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(stream));
-stream.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-stream.parm.output.timeperframe.numerator <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-stream.parm.output.timeperframe.denominator <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>;
-
-ioctl(fd, VIDIOC_S_PARM, <span style="color:#f92672">&amp;</span>stream);
-</code></pre></div><p>The most complex part of the setup is configuring the mmap buffers to send and receive frames.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_format</span> fm;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_pix_format_mplane</span> <span style="color:#f92672">*</span>mp <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>fm.fmt.pix_mp;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fm.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_G_FMT, <span style="color:#f92672">&amp;</span>fm);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1920</span>;
+</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>height <span style="color:#f92672">=</span> <span style="color:#ae81ff">1080</span>;
+</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>pixelformat <span style="color:#f92672">=</span> V4L2_PIX_FMT_YUYV;
+</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_S_FMT, <span style="color:#f92672">&amp;</span>fm);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fm.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_G_FMT, <span style="color:#f92672">&amp;</span>fm);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1920</span>;
+</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>height <span style="color:#f92672">=</span> <span style="color:#ae81ff">1080</span>;
+</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_S_FMT, <span style="color:#f92672">&amp;</span>fm);
+</span></span></code></pre></div><p>Now, we set the inter-frame interval to indirectly set the frame rate. For a 30FPS video:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_streamparm</span> stream;
+</span></span><span style="display:flex;"><span>memset(<span style="color:#f92672">&amp;</span>stream, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(stream));
+</span></span><span style="display:flex;"><span>stream.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+</span></span><span style="display:flex;"><span>stream.parm.output.timeperframe.numerator <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>stream.parm.output.timeperframe.denominator <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_S_PARM, <span style="color:#f92672">&amp;</span>stream);
+</span></span></code></pre></div><p>The most complex part of the setup is configuring the mmap buffers to send and receive frames.
 Since we&rsquo;re not trying to be performant, we use one capture buffer and one output buffer.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> {
-  <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> start;
-  <span style="color:#66d9ef">int</span> length;
-  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_buffer</span> inner;
-  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_plane</span> plane;
-};
-
-<span style="color:#75715e">// mmaps the buffers for the given type of device (capture or output).
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">int</span> fd, <span style="color:#66d9ef">uint32_t</span> type, <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span><span style="color:#f92672">*</span> buffer) {
-  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_buffer</span> <span style="color:#f92672">*</span>inner <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>buffer<span style="color:#f92672">-&gt;</span>inner;
-
-  memset(inner, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(<span style="color:#f92672">*</span>inner));
-  inner<span style="color:#f92672">-&gt;</span>type <span style="color:#f92672">=</span> type;
-  inner<span style="color:#f92672">-&gt;</span>memory <span style="color:#f92672">=</span> V4L2_MEMORY_MMAP;
-  inner<span style="color:#f92672">-&gt;</span>index <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-  inner<span style="color:#f92672">-&gt;</span>length <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-  inner<span style="color:#f92672">-&gt;</span>m.planes <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>buffer<span style="color:#f92672">-&gt;</span>plane;
-
-  ioctl(fd, VIDIOC_QUERYBUF, inner);
-
-  buffer<span style="color:#f92672">-&gt;</span>length <span style="color:#f92672">=</span> inner<span style="color:#f92672">-&gt;</span>m.planes[<span style="color:#ae81ff">0</span>].length;
-  buffer<span style="color:#f92672">-&gt;</span>start <span style="color:#f92672">=</span> mmap(NULL, buffer<span style="color:#f92672">-&gt;</span>length, PROT_READ <span style="color:#f92672">|</span> PROT_WRITE,
-      MAP_SHARED, fd, inner<span style="color:#f92672">-&gt;</span>m.planes[<span style="color:#ae81ff">0</span>].m.mem_offset);
-}
-
-<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_requestbuffers</span> buf;
-buf.memory <span style="color:#f92672">=</span> V4L2_MEMORY_MMAP;
-buf.count <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-
-<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> output;
-buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-ioctl(fd, VIDIOC_REQBUFS, <span style="color:#f92672">&amp;</span>buf);
-map(fd, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, <span style="color:#f92672">&amp;</span>output);
-
-<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> capture;
-buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-ioctl(fd, VIDIOC_REQBUFS, <span style="color:#f92672">&amp;</span>buf);
-map(fd, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, <span style="color:#f92672">&amp;</span>capture);
-</code></pre></div><p>Next, we &ldquo;queue&rdquo; up the capture and output buffers. This tells the encoder that it has exclusive
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> start;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> length;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_buffer</span> inner;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_plane</span> plane;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// mmaps the buffers for the given type of device (capture or output).
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">int</span> fd, <span style="color:#66d9ef">uint32_t</span> type, <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span><span style="color:#f92672">*</span> buffer) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_buffer</span> <span style="color:#f92672">*</span>inner <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>buffer<span style="color:#f92672">-&gt;</span>inner;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  memset(inner, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(<span style="color:#f92672">*</span>inner));
+</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>type <span style="color:#f92672">=</span> type;
+</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>memory <span style="color:#f92672">=</span> V4L2_MEMORY_MMAP;
+</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>index <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>length <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>m.planes <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>buffer<span style="color:#f92672">-&gt;</span>plane;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  ioctl(fd, VIDIOC_QUERYBUF, inner);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  buffer<span style="color:#f92672">-&gt;</span>length <span style="color:#f92672">=</span> inner<span style="color:#f92672">-&gt;</span>m.planes[<span style="color:#ae81ff">0</span>].length;
+</span></span><span style="display:flex;"><span>  buffer<span style="color:#f92672">-&gt;</span>start <span style="color:#f92672">=</span> mmap(NULL, buffer<span style="color:#f92672">-&gt;</span>length, PROT_READ <span style="color:#f92672">|</span> PROT_WRITE,
+</span></span><span style="display:flex;"><span>      MAP_SHARED, fd, inner<span style="color:#f92672">-&gt;</span>m.planes[<span style="color:#ae81ff">0</span>].m.mem_offset);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_requestbuffers</span> buf;
+</span></span><span style="display:flex;"><span>buf.memory <span style="color:#f92672">=</span> V4L2_MEMORY_MMAP;
+</span></span><span style="display:flex;"><span>buf.count <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> output;
+</span></span><span style="display:flex;"><span>buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_REQBUFS, <span style="color:#f92672">&amp;</span>buf);
+</span></span><span style="display:flex;"><span>map(fd, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, <span style="color:#f92672">&amp;</span>output);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> capture;
+</span></span><span style="display:flex;"><span>buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_REQBUFS, <span style="color:#f92672">&amp;</span>buf);
+</span></span><span style="display:flex;"><span>map(fd, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, <span style="color:#f92672">&amp;</span>capture);
+</span></span></code></pre></div><p>Next, we &ldquo;queue&rdquo; up the capture and output buffers. This tells the encoder that it has exclusive
 access to these buffers until we dequeue them.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>capture<span style="color:#f92672">-&gt;</span>inner);
-ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>output<span style="color:#f92672">-&gt;</span>inner);
-</code></pre></div><p>Finally, we start the streaming process; this tells the kernel that it should start
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>capture<span style="color:#f92672">-&gt;</span>inner);
+</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>output<span style="color:#f92672">-&gt;</span>inner);
+</span></span></code></pre></div><p>Finally, we start the streaming process; this tells the kernel that it should start
 reading raw frames from the output buffer and writing encoded frames to the capture buffer:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">int</span> type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-ioctl(fd, VIDIOC_STREAMON, <span style="color:#f92672">&amp;</span>type);
-
-type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-ioctl(fd, VIDIOC_STREAMON, <span style="color:#f92672">&amp;</span>type);
-</code></pre></div><h2 id="streaming">Streaming</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_STREAMON, <span style="color:#f92672">&amp;</span>type);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_STREAMON, <span style="color:#f92672">&amp;</span>type);
+</span></span></code></pre></div><h2 id="streaming">Streaming</h2>
 <p>The actual encoding process is a straightforward loop where we:</p>
 <ul>
 <li>dequeue an output frame, write the next frame and queue it again.</li>
 <li>dequeue a capture frame, read the encoded frame and queue it again.</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">// Assumed functions for reading a raw frame and writing an encoded frame.
-</span><span style="color:#75715e">// Depending on application this can be from a file, a device or anywhere else.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">read_raw</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> buf, size_t len);
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">write_encoded</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> buf, size_t len);
-
-<span style="color:#66d9ef">int</span> bytes;
-<span style="color:#66d9ef">do</span> {
-  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_buffer</span> buf;
-  buf.memory <span style="color:#f92672">=</span> V4L2_MEMORY_MMAP;
-  buf.length <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-
-  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_plane</span> out_planes;
-  memset(<span style="color:#f92672">&amp;</span>out_planes, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(out_planes));
-  buf.m.planes <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>out_planes;
-
-  <span style="color:#75715e">// Dequeue the output buffer, read the next frame and queue it back.
-</span><span style="color:#75715e"></span>  buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-  ioctl(fd, VIDIOC_DQBUF, <span style="color:#f92672">&amp;</span>buf);
-
-  bytes <span style="color:#f92672">=</span> read_raw(output<span style="color:#f92672">-&gt;</span>start, output<span style="color:#f92672">-&gt;</span>length);
-  output<span style="color:#f92672">-&gt;</span>plane.bytesused <span style="color:#f92672">=</span> bytes;
-
-  ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>output<span style="color:#f92672">-&gt;</span>inner);
-
-  <span style="color:#75715e">// Dequeue the capture buffer, write out the encoded frame and queue it back.
-</span><span style="color:#75715e"></span>  buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-  ioctl(fd, VIDIOC_DQBUF, <span style="color:#f92672">&amp;</span>buf);
-
-  <span style="color:#66d9ef">int</span> encoded_len <span style="color:#f92672">=</span> buf.m.planes[<span style="color:#ae81ff">0</span>].bytesused;
-  write_encoded(capture<span style="color:#f92672">-&gt;</span>start, encoded_len);
-
-  ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>capture<span style="color:#f92672">-&gt;</span>inner);
-} <span style="color:#66d9ef">while</span> (bytes <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>);
-</code></pre></div><h1 id="what-i-learned">What I learned</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">// Assumed functions for reading a raw frame and writing an encoded frame.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// Depending on application this can be from a file, a device or anywhere else.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">read_raw</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> buf, size_t len);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">write_encoded</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> buf, size_t len);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> bytes;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">do</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_buffer</span> buf;
+</span></span><span style="display:flex;"><span>  buf.memory <span style="color:#f92672">=</span> V4L2_MEMORY_MMAP;
+</span></span><span style="display:flex;"><span>  buf.length <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_plane</span> out_planes;
+</span></span><span style="display:flex;"><span>  memset(<span style="color:#f92672">&amp;</span>out_planes, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(out_planes));
+</span></span><span style="display:flex;"><span>  buf.m.planes <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>out_planes;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Dequeue the output buffer, read the next frame and queue it back.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+</span></span><span style="display:flex;"><span>  ioctl(fd, VIDIOC_DQBUF, <span style="color:#f92672">&amp;</span>buf);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  bytes <span style="color:#f92672">=</span> read_raw(output<span style="color:#f92672">-&gt;</span>start, output<span style="color:#f92672">-&gt;</span>length);
+</span></span><span style="display:flex;"><span>  output<span style="color:#f92672">-&gt;</span>plane.bytesused <span style="color:#f92672">=</span> bytes;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>output<span style="color:#f92672">-&gt;</span>inner);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Dequeue the capture buffer, write out the encoded frame and queue it back.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+</span></span><span style="display:flex;"><span>  ioctl(fd, VIDIOC_DQBUF, <span style="color:#f92672">&amp;</span>buf);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> encoded_len <span style="color:#f92672">=</span> buf.m.planes[<span style="color:#ae81ff">0</span>].bytesused;
+</span></span><span style="display:flex;"><span>  write_encoded(capture<span style="color:#f92672">-&gt;</span>start, encoded_len);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>capture<span style="color:#f92672">-&gt;</span>inner);
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">while</span> (bytes <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>);
+</span></span></code></pre></div><h1 id="what-i-learned">What I learned</h1>
 <p>There are several useful things I learned while working on this project:</p>
 <ul>
 <li>The kernel documentation had some excellent high-level explanations about how the API worked
