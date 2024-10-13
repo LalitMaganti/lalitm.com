@@ -4,7 +4,7 @@
     <title>V4L2 and Hardware Encoding on the Raspberry Pi // Lalit Maganti</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.120.4">
+    <meta name="generator" content="Hugo 0.135.0">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Lalit Maganti" />
     <meta name="description" content="" />
@@ -22,19 +22,22 @@
   gtag('config', 'G-CPF1NN7N28');
 </script>
     
-    <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="V4L2 and Hardware Encoding on the Raspberry Pi"/>
-<meta name="twitter:description" content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
-Background My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi."/>
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="V4L2 and Hardware Encoding on the Raspberry Pi">
+  <meta name="twitter:description" content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
+Background My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses ustreamer to read frames from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the MJPEG output, support was recently added for encoding video using H264.">
 
-    <meta property="og:title" content="V4L2 and Hardware Encoding on the Raspberry Pi" />
-<meta property="og:description" content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
-Background My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="/hw-encoding-raspi/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-02-01T23:00:00+00:00" />
-<meta property="article:modified_time" content="2021-02-01T23:00:00+00:00" />
-
+    <meta property="og:url" content="/hw-encoding-raspi/">
+  <meta property="og:site_name" content="Lalit Maganti">
+  <meta property="og:title" content="V4L2 and Hardware Encoding on the Raspberry Pi">
+  <meta property="og:description" content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
+Background My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses ustreamer to read frames from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the MJPEG output, support was recently added for encoding video using H264.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-02-01T23:00:00+00:00">
+    <meta property="article:modified_time" content="2021-02-01T23:00:00+00:00">
 
 
   </head>

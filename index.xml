@@ -4,7 +4,7 @@
     <title>Lalit Maganti</title>
     <link>/</link>
     <description>Recent content on Lalit Maganti</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate>Mon, 01 Feb 2021 23:00:00 +0000</lastBuildDate>
     <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
@@ -13,16 +13,14 @@
       <link>/hw-encoding-raspi/</link>
       <pubDate>Mon, 01 Feb 2021 23:00:00 +0000</pubDate>
       <guid>/hw-encoding-raspi/</guid>
-      <description>TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
-Background My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi.</description>
+      <description>&lt;p&gt;&lt;strong&gt;TLDR&lt;/strong&gt;: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on&#xA;the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding&#xA;and encoding on Linux.&lt;/p&gt;&#xA;&lt;h1 id=&#34;background&#34;&gt;Background&lt;/h1&gt;&#xA;&lt;p&gt;My journey started at &lt;a href=&#34;https://www.youtube.com/watch?v=CyEpshm16HY&amp;amp;t=139s&#34;&gt;this video&lt;/a&gt;&#xA;on the excellent &lt;a href=&#34;https://www.youtube.com/channel/UCp3yVOm6A55nx65STpm3tXQ&#34;&gt;Craft Computing&lt;/a&gt; YouTube channel&#xA;which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi.&#xA;Behind the scenes, TinyPilot uses &lt;a href=&#34;https://github.com/pikvm/ustreamer&#34;&gt;ustreamer&lt;/a&gt; to read frames&#xA;from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the&#xA;MJPEG output, support was recently added for encoding video using H264.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Lalit Maganti</title>
       <link>/page/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>/page/about/</guid>
-      <description>I&amp;rsquo;m a software engineer working at Google on Perfetto, the next generation performance tracing framework used by Chrome and Android. My main work is with the trace processor, a C++ library that ingests traces and exposes an SQL interface for querying events.
-In my spare time, I tinker with projects from a variety of software engineering domains and write endless (largely unreleased) personal projects. I also play copious amounts of chess.</description>
+      <description>&lt;p&gt;I&amp;rsquo;m a software engineer working at Google on &lt;a href=&#34;https://perfetto.dev&#34;&gt;Perfetto&lt;/a&gt;, the next generation performance&#xA;tracing framework used by Chrome and Android. My main work is with the&#xA;&lt;a href=&#34;https://perfetto.dev/docs/analysis/trace-processor&#34;&gt;trace processor&lt;/a&gt;, a C++ library that ingests traces&#xA;and exposes an SQL interface for querying events.&lt;/p&gt;&#xA;&lt;p&gt;In my spare time, I tinker with projects from a variety of software engineering domains and&#xA;write endless (largely unreleased) personal projects. I also play copious amounts of chess.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
