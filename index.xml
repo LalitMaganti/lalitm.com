@@ -20,7 +20,7 @@
       <link>/page/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>/page/about/</guid>
-      <description>&lt;p&gt;I&amp;rsquo;m a software engineer working at Google on &lt;a href=&#34;https://perfetto.dev&#34;&gt;Perfetto&lt;/a&gt;,&#xA;a suite of open source tracing tools helping developers understand the behaviour&#xA;and performance of complex systems. This includes both Android and Chrome where&#xA;Perfetto is the default tracing system but is also used by many other teams in&#xA;Google and by other companies in the industry.&lt;/p&gt;&#xA;&lt;p&gt;In my spare time, I tinker with projects from a variety of computer scinece&#xA;domains and write endless (largely unreleased) personal projects. I also play&#xA;copious amounts of chess.&lt;/p&gt;</description>
+      <description>&lt;p&gt;I&amp;rsquo;m a software engineer working at Google on &lt;a href=&#34;https://perfetto.dev&#34;&gt;Perfetto&lt;/a&gt;, the next generation performance&#xA;tracing framework used by Chrome and Android. My main work is with the&#xA;&lt;a href=&#34;https://perfetto.dev/docs/analysis/trace-processor&#34;&gt;trace processor&lt;/a&gt;, a C++ library that ingests traces&#xA;and exposes an SQL interface for querying events.&lt;/p&gt;&#xA;&lt;p&gt;In my spare time, I tinker with projects from a variety of software engineering domains and&#xA;write endless (largely unreleased) personal projects. I also play copious amounts of chess.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
