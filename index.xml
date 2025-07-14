@@ -6,8 +6,15 @@
     <description>Recent content on Lalit Maganti</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 01 Feb 2021 23:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 14 Jul 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Harnessing Frustration: Using LLMs to Overcome Activation Energy</title>
+      <link>/llm-motivation-via-emotions/</link>
+      <pubDate>Mon, 14 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>/llm-motivation-via-emotions/</guid>
+      <description>&lt;p&gt;One of my biggest weaknesses as a software engineer is procrastination&#xA;when facing a new project. When the scope is unclear, I have a tendency to&#xA;wait until I feel I&amp;rsquo;ve &amp;ldquo;felt out&amp;rdquo; the problem to start doing anything.&#xA;I know I&amp;rsquo;ll feel better and work much faster when I get &amp;ldquo;stuck in&amp;rdquo; but&#xA;I still struggle with that first step, overcoming the &amp;ldquo;activation energy&amp;rdquo;&#xA;required to engage with the details.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>V4L2 and Hardware Encoding on the Raspberry Pi</title>
       <link>/hw-encoding-raspi/</link>
