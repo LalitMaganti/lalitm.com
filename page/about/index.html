@@ -30,6 +30,30 @@ trace processor, a C&#43;&#43; library that imports
 traces in a wide variety of formats and exposes an SQL interface for querying their contents." />
   <meta name="author" content="Lalit Maganti" /><link rel="preload stylesheet" as="style" href="/main.min.css" />
 
+  <style>
+    article {
+      font-size: 0.9375rem !important;
+      line-height: 1.6 !important;
+    }
+    article header h1,
+    article > header > h1,
+    article > h1 {
+      font-size: 1rem !important;
+      line-height: 1.6 !important;
+      font-weight: 700 !important;
+    }
+    article h1 a {
+      font-weight: 700 !important;
+    }
+    main.prose > *:first-child,
+    main.prose > *:first-child > *:first-child {
+      margin-top: 0 !important;
+    }
+    main {
+      padding-top: 1rem !important;
+    }
+  </style>
+
   
   <link rel="preload" as="image" href="/theme.png" />
 
@@ -187,10 +211,11 @@ traces in a wide variety of formats and exposes an SQL interface for querying th
   </div>
 </header>
 <main
-      class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-14 pb-16"
+      class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-0 pb-16"
+      style="margin-top: 0;"
     ><article>
-  <header class="mb-14">
-    <h1 class="my-0! pb-2.5">About</h1></header>
+  <header class="mb-4">
+    <h1 class="!mt-0 !mb-1 !text-base !font-bold">About</h1></header>
 
   <section><p>I&rsquo;m a software engineer working at Google on <a href="https://perfetto.dev">Perfetto</a>, a suite of open source tracing tools helping developers understand the behaviour and performance of complex systems. This includes both Android and Chrome where Perfetto is the default tracing system. Perfetto is also used by many other products in Google and by other companies in the industry. My main work is with the
 <a href="https://perfetto.dev/docs/analysis/trace-processor">trace processor</a>, a C++ library that imports
