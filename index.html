@@ -231,16 +231,14 @@ developers regularly.</p>
 <p>So if simplicity and the Unix philosophy aren&rsquo;t the whole story, what else
 matters?</p>
 <p>I’ve come up with three “hallmarks” of a good tool for tool calling with LLMs.</p>
-<hr>
-<h3 id="1-its-been-around-for-a-long-time-andor-is-used-by-lots-of-people">1. It’s been around for a long time and/or is used by lots of people</h3>
+<p><strong>1. It’s been around for a long time and/or is used by lots of people</strong></p>
 <p>Examples: Unix tools like <code>cat</code>, <code>sed</code>, <code>awk</code>, <code>grep</code>, <code>find</code>—but also <code>git</code>,
 <code>npm</code>, <code>docker</code>, <code>kubectl</code>. Every Stack Overflow thread, blog post, and tutorial
 using these tools has likely ended up in the training data. Claude isn’t
 reasoning from first principles—it’s drawing on millions of examples.</p>
 <p>This is why git works despite its complexity: Claude has effectively memorized
 decades of collective wisdom.</p>
-<hr>
-<h3 id="2-it-has-really-good-documentation-built-in-help-or-external-docs">2. It has really good documentation (built-in help or external docs)</h3>
+<p><strong>2. It has really good documentation (built-in help or external docs)</strong></p>
 <p>Even if a tool isn’t widely used, great documentation can bridge the gap. I’ve
 been building a finance system on top of
 <a href="https://beancount.github.io/">Beancount</a>—a double-entry accounting system
@@ -251,8 +249,7 @@ the directive syntax, transaction formats, and account structures without
 necessarily having seen millions of examples in its training data.</p>
 <p>Good <code>--help</code> text matters. Clear external documentation matters. If Claude can
 discover how your tool works, it can use it effectively.</p>
-<hr>
-<h3 id="3-good-error-messages">3. Good error messages</h3>
+<p><strong>3. Good error messages</strong></p>
 <p>Error messages, especially those with suggestions like “you used X, did you mean
 Y?”, can be tremendously helpful for LLMs. The best example is the Rust
 compiler: it gives errors like “you typed foobar, did you mean foobaz?” and
@@ -260,7 +257,6 @@ Claude Code can actually use that feedback to correct itself.</p>
 <p>This might be one reason why people feel Claude Code is particularly good at
 Rust programming—the compiler is essentially coaching it through mistakes in
 real time.</p>
-<hr>
 <p>This isn’t to say the Unix philosophy is wrong — it’s that Unix tools work well
 with Claude Code for different reasons than we might think. Tools like sed and
 awk nail hallmarks 1 and 2: they’ve been around for decades (massive training
