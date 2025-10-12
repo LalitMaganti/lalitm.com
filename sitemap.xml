@@ -3,10 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/</loc>
-    <lastmod>2025-10-14T00:00:00+00:00</lastmod>
+    <lastmod>2025-10-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/post/</loc>
-    <lastmod>2025-10-14T00:00:00+00:00</lastmod>
+    <lastmod>2025-10-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/writing-tools-for-claude-code/</loc>
+    <lastmod>2025-10-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/llm-motivation-via-emotions/</loc>
     <lastmod>2025-07-14T00:00:00+00:00</lastmod>

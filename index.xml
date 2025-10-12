@@ -6,8 +6,15 @@
     <description>Recent content on Lalit Maganti</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 14 Jul 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 12 Oct 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>What Makes a Good Tool for Claude Code</title>
+      <link>/writing-tools-for-claude-code/</link>
+      <pubDate>Sun, 12 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>/writing-tools-for-claude-code/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve been using Claude Code extensively for personal projects, and similar AI&#xA;coding tools at work. Recently I came across&#xA;&lt;a href=&#34;https://www.alephic.com/writing/the-magic-of-claude-code&#34;&gt;this excellent blog post&lt;/a&gt;&#xA;that resonated with a lot of my experience.&lt;/p&gt;&#xA;&lt;p&gt;One part stuck with me though: Noah emphasizes that tools fail with LLMs when&#xA;they&amp;rsquo;re &amp;ldquo;overly complex,&amp;rdquo; with the Unix philosophy being particularly&#xA;well-suited for tool calling. But then I thought about &lt;code&gt;git&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;p&gt;Git breaks the Unix philosophy completely. It&amp;rsquo;s sprawling, stateful, and&#xA;complex. And yet Claude Code handles it effortlessly. It composes commands that,&#xA;even after 10+ years of daily git usage, I wouldn&amp;rsquo;t think to use. It handles&#xA;rebasing, cherry-picking, complex resets—stuff that trips up experienced&#xA;developers regularly.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Harnessing Frustration: Using LLMs to Overcome Activation Energy</title>
       <link>/llm-motivation-via-emotions/</link>
