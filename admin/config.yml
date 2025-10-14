@@ -15,6 +15,10 @@ publish_mode: editorial_workflow
 media_folder: "static/img"
 public_folder: "/img"
 
+# Load site styles in CMS preview
+editor:
+  preview: true
+
 collections:
   - name: "post"
     label: "Blog Posts"
