@@ -4,6 +4,7 @@ backend:
   branch: main
   base_url: https://api.netlify.com
   site_domain: gleaming-pasca-1b9b02.netlify.app
+  auth_type: implicit
 
 # For local development, uncomment this and comment out github above
 # backend:
