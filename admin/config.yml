@@ -2,6 +2,8 @@ backend:
   name: github
   repo: LalitMaganti/lalitm.com-source
   branch: main
+  base_url: https://gleaming-pasca-1b9b02.netlify.app
+  auth_endpoint: /.netlify/functions/auth-callback
 
 # For local development, uncomment this and comment out github above
 # backend:
