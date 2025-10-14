@@ -1,498 +1,59 @@
-<!doctype html>
-
-
-
-
-
-
-
-<html
-  class="not-ready lg:text-base"
-  style="--bg:#faf8f1"
-  lang="en"
-  dir="ltr"
-><head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, shrink-to-fit=no"
-  />
-
-  
-  <title>Lalit Maganti</title>
-
-  
-  <meta name="theme-color" />
-
-  
-  <meta
-    name="description"
-    content="A personal blog"
-  />
-  <meta name="author" content="Lalit Maganti" /><link rel="preload stylesheet" as="style" href="/main.min.css" />
-
-  <style>
-    article {
-      font-size: 0.9375rem !important;
-      line-height: 1.6 !important;
-    }
-    article header h1,
-    article > header > h1,
-    article > h1 {
-      font-size: 1rem !important;
-      line-height: 1.6 !important;
-      font-weight: 700 !important;
-    }
-    article h1 a {
-      font-weight: 700 !important;
-    }
-    main.prose > *:first-child,
-    main.prose > *:first-child > *:first-child {
-      margin-top: 0 !important;
-    }
-    main {
-      padding-top: 1rem !important;
-    }
-  </style>
-
-  
-  <link rel="preload" as="image" href="/theme.png" />
-
-  
-
-  <link rel="preload" as="image" href="/github.svg" /><link rel="preload" as="image" href="/linkedin.svg" /><link rel="preload" as="image" href="/rss.svg" />
-
-  
-
-  
-  <link
-    rel="icon"
-    href="/favicon.ico"
-  />
-  <link
-    rel="apple-touch-icon"
-    href="/apple-touch-icon.png"
-  />
-
-  <meta name="generator" content="Hugo 0.148.1">
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPF1NN7N28"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-CPF1NN7N28');
-        }
-      </script>
-  <meta itemprop="name" content="Lalit Maganti">
-  <meta itemprop="datePublished" content="2025-10-12T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-10-12T00:00:00+00:00"><meta property="og:url" content="/">
-  <meta property="og:site_name" content="Lalit Maganti">
-  <meta property="og:title" content="Lalit Maganti">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="website">
-
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Lalit Maganti">
-<link
-    rel="alternate"
-    type="application/rss&#43;xml"
-    href="/index.xml"
-    title="Lalit Maganti"
-  />
-  <link rel="canonical" href="/" />
-</head>
-<body
-    class="bg-(--bg) text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white"
-  ><header
-  class="mx-auto flex h-[4.5rem] max-w-(--w) px-8 whitespace-nowrap lg:justify-center"
->
-  <div class="relative z-50 flex items-center ltr:mr-auto rtl:ml-auto">
-    <a
-      class="-translate-y-[1px] text-2xl font-medium"
-      href="/"
-      >Lalit Maganti</a
-    >
-    <div
-      class="btn-dark text-[0px] ltr:ml-4 rtl:mr-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.png)_left_center/_auto_theme('spacing.6')_no-repeat] [transition:_background-position_0.4s_steps(5)] dark:[background-position:right]"
-      role="button"
-      aria-label="Dark"
-    ></div>
-  </div>
-
-  <div
-    class="btn-menu relative z-50 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden ltr:-mr-8 rtl:-ml-8"
-    role="button"
-    aria-label="Menu"
-  ></div>
-
-  <script>
-    
-    const htmlClass = document.documentElement.classList;
-    setTimeout(() => {
-      htmlClass.remove('not-ready');
-    }, 10);
-
-    
-    const btnMenu = document.querySelector('.btn-menu');
-    btnMenu.addEventListener('click', () => {
-      htmlClass.toggle('open');
-    });
-
-    
-    const metaTheme = document.querySelector('meta[name="theme-color"]');
-    const lightBg = '#faf8f1'.replace(/"/g, '');
-    const setDark = (isDark) => {
-      metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
-      htmlClass[isDark ? 'add' : 'remove']('dark');
-      localStorage.setItem('dark', isDark);
-    };
-
-    
-    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    if (htmlClass.contains('dark')) {
-      setDark(true);
-    } else {
-      const darkVal = localStorage.getItem('dark');
-      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
-    }
-
-    
-    darkScheme.addEventListener('change', (event) => {
-      setDark(event.matches);
-    });
-
-    
-    const btnDark = document.querySelector('.btn-dark');
-    btnDark.addEventListener('click', () => {
-      setDark(localStorage.getItem('dark') !== 'true');
-    });
-  </script>
-
-  <div
-    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-(--bg) pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none"
-  ><nav
-      class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-10 rtl:space-x-reverse"
-    ><a
-        class="block text-center text-xl leading-[5rem] lg:text-base lg:font-normal"
-        href="/page/about/"
-        >About</a
-      ></nav><nav
-      class="mt-12 flex justify-center space-x-10 lg:mt-0 lg:items-center ltr:lg:ml-14 rtl:space-x-reverse rtl:lg:mr-14 dark:invert"
-    >
-      <a
-        class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
-        style="--url: url(./github.svg)"
-        href="https://github.com/LalitMaganti"
-        target="_blank"
-        rel="me"
-      >github</a>
-      <a
-        class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
-        style="--url: url(./linkedin.svg)"
-        href="https://linkedin.com/in/lalit-maganti-18b73a9a"
-        target="_blank"
-        rel="me"
-      >linkedin</a>
-      <a
-        class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
-        style="--url: url(./rss.svg)"
-        href="/index.xml"
-        target="_blank"
-        rel="alternate"
-      >rss</a>
-    </nav>
-  </div>
-</header>
-<main
-      class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-0 pb-16"
-      style="margin-top: 0;"
-    ><article class="mb-2 pb-2 first-of-type:mt-0">
-  <h1 class="!mt-0 !mb-1 !text-base !font-bold"><a href="/writing-tools-for-claude-code/" class="!text-black dark:!text-white !no-underline hover:!underline">What Makes a Good Tool for Claude Code</a></h1>
-  <time class="block text-xs" style="margin-bottom: 0.5rem; opacity: 0.4;">Oct 12, 2025</time>
-  <div><p>I&rsquo;ve been using Claude Code extensively for personal projects, and similar AI
+<!doctype html><html class="not-ready lg:text-base" style=--bg:#faf8f1 lang=en dir=ltr><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Lalit Maganti</title><meta name=theme-color><meta name=description content="A personal blog"><meta name=author content="Lalit Maganti"><link rel="preload stylesheet" as=style href=/main.min.css><style>article{font-size:.9375rem!important;line-height:1.6!important}article header h1,article>header>h1,article>h1{font-size:1rem!important;line-height:1.6!important;font-weight:700!important}article h1 a{font-weight:700!important}main.prose>*:first-child,main.prose>*:first-child>*:first-child{margin-top:0!important}main{padding-top:1rem!important}</style><link rel=preload as=image href=/theme.png><link rel=preload as=image href=/github.svg><link rel=preload as=image href=/linkedin.svg><link rel=preload as=image href=/rss.svg><link rel=icon href=/favicon.ico><link rel=apple-touch-icon href=/apple-touch-icon.png><meta name=generator content="Hugo 0.151.0"><script async src="https://www.googletagmanager.com/gtag/js?id=G-CPF1NN7N28"></script><script>var dnt,doNotTrack=!1;if(!1&&(dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes"),!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-CPF1NN7N28")}</script><meta itemprop=name content="Lalit Maganti"><meta itemprop=datePublished content="2025-10-14T00:00:00+00:00"><meta itemprop=dateModified content="2025-10-14T00:00:00+00:00"><meta property="og:url" content="/"><meta property="og:site_name" content="Lalit Maganti"><meta property="og:title" content="Lalit Maganti"><meta property="og:locale" content="en"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Lalit Maganti"><link rel=alternate type=application/rss+xml href=/index.xml title="Lalit Maganti"><link rel=canonical href=/></head><body class="bg-(--bg) text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white"><header class="mx-auto flex h-[4.5rem] max-w-(--w) px-8 whitespace-nowrap lg:justify-center"><div class="relative z-50 flex items-center ltr:mr-auto rtl:ml-auto"><a class="-translate-y-[1px] text-2xl font-medium" href=/>Lalit Maganti</a><div class="btn-dark text-[0px] ltr:ml-4 rtl:mr-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.png)_left_center/_auto_theme('spacing.6')_no-repeat] [transition:_background-position_0.4s_steps(5)] dark:[background-position:right]" role=button aria-label=Dark></div></div><div class="btn-menu relative z-50 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden ltr:-mr-8 rtl:-ml-8" role=button aria-label=Menu></div><script>const htmlClass=document.documentElement.classList;setTimeout(()=>{htmlClass.remove("not-ready")},10);const btnMenu=document.querySelector(".btn-menu");btnMenu.addEventListener("click",()=>{htmlClass.toggle("open")});const metaTheme=document.querySelector('meta[name="theme-color"]'),lightBg="#faf8f1".replace(/"/g,""),setDark=e=>{metaTheme.setAttribute("content",e?"#000":lightBg),htmlClass[e?"add":"remove"]("dark"),localStorage.setItem("dark",e)},darkScheme=window.matchMedia("(prefers-color-scheme: dark)");if(htmlClass.contains("dark"))setDark(!0);else{const e=localStorage.getItem("dark");setDark(e?e==="true":darkScheme.matches)}darkScheme.addEventListener("change",e=>{setDark(e.matches)});const btnDark=document.querySelector(".btn-dark");btnDark.addEventListener("click",()=>{setDark(localStorage.getItem("dark")!=="true")})</script><div class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-(--bg) pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none"><nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-10 rtl:space-x-reverse"><a class="block text-center text-xl leading-[5rem] lg:text-base lg:font-normal" href=/page/about/>About</a></nav><nav class="mt-12 flex justify-center space-x-10 lg:mt-0 lg:items-center ltr:lg:ml-14 rtl:space-x-reverse rtl:lg:mr-14 dark:invert"><a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./github.svg) href=https://github.com/LalitMaganti target=_blank rel=me>github</a>
+<a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./linkedin.svg) href=https://linkedin.com/in/lalit-maganti-18b73a9a target=_blank rel=me>linkedin</a>
+<a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./rss.svg) href=/index.xml target=_blank rel=alternate>rss</a></nav></div></header><main class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-0 pb-16" style=margin-top:0><article class="mb-2 pb-2 first-of-type:mt-0"><h1 class="!mt-0 !mb-1 !text-base !font-bold"><a href=/writing-tools-for-claude-code/ class="!text-black dark:!text-white !no-underline hover:!underline">What Makes a Good Tool for Claude Code</a></h1><time class="block text-xs" style=margin-bottom:.5rem;opacity:.4>Oct 12, 2025</time><div><p>I&rsquo;ve been using Claude Code extensively for personal projects, and similar AI
 coding tools at work. Recently I came across
-<a href="https://www.alephic.com/writing/the-magic-of-claude-code">this excellent blog post</a>
-that resonated with a lot of my experience.</p>
-<p>One part stuck with me though: Noah emphasizes that tools fail with LLMs when
+<a href=https://www.alephic.com/writing/the-magic-of-claude-code>this excellent blog post</a>
+that resonated with a lot of my experience.</p><p>One part stuck with me though: Noah emphasizes that tools fail with LLMs when
 they&rsquo;re &ldquo;overly complex,&rdquo; with the Unix philosophy being particularly
-well-suited for tool calling. But then I thought about <code>git</code>.</p>
-<p>Git breaks the Unix philosophy completely. It&rsquo;s sprawling, stateful, and
+well-suited for tool calling. But then I thought about <code>git</code>.</p><p>Git breaks the Unix philosophy completely. It&rsquo;s sprawling, stateful, and
 complex. And yet Claude Code handles it effortlessly. It composes commands that,
 even after 10+ years of daily git usage, I wouldn&rsquo;t think to use. It handles
 rebasing, cherry-picking, complex resets—stuff that trips up experienced
-developers regularly.</p>
-<p>So if simplicity and the Unix philosophy aren&rsquo;t the whole story, what else
-matters?</p>
-<p>I’ve come up with three “hallmarks” of a good tool for tool calling with LLMs.</p>
-<p><strong>1. It’s been around for a long time and/or is used by lots of people</strong></p>
-<p>Examples: Unix tools like <code>cat</code>, <code>sed</code>, <code>awk</code>, <code>grep</code>, <code>find</code>—but also <code>git</code>,
+developers regularly.</p><p>So if simplicity and the Unix philosophy aren&rsquo;t the whole story, what else
+matters?</p><p>I’ve come up with three “hallmarks” of a good tool for tool calling with LLMs.</p><p><strong>1. It’s been around for a long time and/or is used by lots of people</strong></p><p>Examples: Unix tools like <code>cat</code>, <code>sed</code>, <code>awk</code>, <code>grep</code>, <code>find</code>—but also <code>git</code>,
 <code>npm</code>, <code>docker</code>, <code>kubectl</code>. Every Stack Overflow thread, blog post, and tutorial
 using these tools has likely ended up in the training data. Claude isn’t
-reasoning from first principles—it’s drawing on millions of examples.</p>
-<p>This is why git works despite its complexity: Claude has effectively memorized
-decades of collective wisdom.</p>
-<p><strong>2. It has really good documentation (built-in help or external docs)</strong></p>
-<p>Even if a tool isn’t widely used, great documentation can bridge the gap. I’ve
+reasoning from first principles—it’s drawing on millions of examples.</p><p>This is why git works despite its complexity: Claude has effectively memorized
+decades of collective wisdom.</p><p><strong>2. It has really good documentation (built-in help or external docs)</strong></p><p>Even if a tool isn’t widely used, great documentation can bridge the gap. I’ve
 been building a finance system on top of
-<a href="https://beancount.github.io/docs/">Beancount</a>—a double-entry accounting system
+<a href=https://beancount.github.io/docs/>Beancount</a>—a double-entry accounting system
 that’s definitely not mainstream (maybe I’ll write a post about this in the
 future). Claude Code handles it surprisingly well because Beancount has
 exceptional documentation. When I point Claude at the docs, it can figure out
 the directive syntax, transaction formats, and account structures without
-necessarily having seen millions of examples in its training data.</p>
-<p>Good <code>--help</code> text matters. Clear external documentation matters. If Claude can
-discover how your tool works, it can use it effectively.</p>
-<p><strong>3. It has good error messages when something is wrong</strong></p>
-<p>Error messages, especially those with suggestions like “you used X, did you mean
+necessarily having seen millions of examples in its training data.</p><p>Good <code>--help</code> text matters. Clear external documentation matters. If Claude can
+discover how your tool works, it can use it effectively.</p><p><strong>3. Good error messages</strong></p><p>Error messages, especially those with suggestions like “you used X, did you mean
 Y?”, can be tremendously helpful for LLMs. The best example is the Rust
 compiler: it gives errors like “you typed foobar, did you mean foobaz?” and
-Claude Code can actually use that feedback to correct itself.</p>
-<p>This might be one reason why people feel Claude Code is particularly good at
+Claude Code can actually use that feedback to correct itself.</p><p>This might be one reason why people feel Claude Code is particularly good at
 Rust programming—the compiler is essentially coaching it through mistakes in
-real time.</p>
-<hr>
-<p>None of this is to say the Unix philosophy is wrong — it’s that Unix tools work
-well with Claude Code for different reasons than simplicity. Tools like <code>grep</code>
-and <code>cat</code> nail hallmarks 1 and 2: they’ve been around for decades (massive
-training data) and have extensive man pages (great documentation). The fact that
-they follow “do one thing well” is almost incidental to their success with LLMs.</p>
-<p>So if I’m building a tool today, I can’t make it instantly popular, but I can
+real time.</p><p>This isn’t to say the Unix philosophy is wrong — it’s that Unix tools work well
+with Claude Code for different reasons than we might think. Tools like sed and
+awk nail hallmarks 1 and 2: they’ve been around for decades (massive training
+data) and have extensive man pages (great documentation). The fact that they
+follow “do one thing well” is almost incidental to their success with LLMs.</p><p>So if I’m building a tool today, I can’t make it instantly popular, but I can
 make it understandable. That means good documentation, clear error messages, and
 a few solid examples of how it’s used. Those aren’t new ideas — they’ve always
-mattered. It’s just that, with LLMs in the mix, the payoff for doing them well
-is suddenly much higher.</p>
-</div>
-</article><hr style="border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3); margin-top: 0.25rem; margin-bottom: 0.25rem;"><article class="mb-2 pb-2 first-of-type:mt-0">
-  <h1 class="!mt-0 !mb-1 !text-base !font-bold"><a href="/llm-motivation-via-emotions/" class="!text-black dark:!text-white !no-underline hover:!underline">Harnessing Frustration: Using LLMs to Overcome Activation Energy</a></h1>
-  <time class="block text-xs" style="margin-bottom: 0.5rem; opacity: 0.4;">Jul 14, 2025</time>
-  <div><p>One of my biggest weaknesses as a software engineer is procrastination
-when facing a new project. When the scope is unclear, I have a tendency to
-wait until I feel I&rsquo;ve &ldquo;felt out&rdquo; the problem to start doing anything.
-I know I&rsquo;ll feel better and work much faster when I get &ldquo;stuck in&rdquo; but
-I still struggle with that first step, overcoming the &ldquo;activation energy&rdquo;
-required to engage with the details.</p>
-<p>LLMs have been a game-changer for me in this respect: I can just throw a couple
-of sentences at them with the shape of the problem. This leads to one of two
-outcomes:</p>
-<ol>
-<li>The LLM comes up with a good solution, usually in a slightly different
-way than what I was thinking. I realize &ldquo;oh wow the solution is much
-simpler than I thought&rdquo;. Straight away I start thinking about the consequences
-of implementing and improving what the LLM suggested.</li>
-<li>The LLM comes up with a solution that I intuitively recognize as &ldquo;wrong&rdquo;.
-My immediate reaction is frustration (&ldquo;How could it get it so wrong&rdquo;) which leads me
-to go back and forth with the model, explaining to it why its solution
-could not <em>possibly</em> work. But in the process of arguing with the model, my
-brain is churning away and generating variations or different
-approaches that <em>could</em> work. After a while, even if the AI is still on the wrong
-track, the debate will trigger a moment of inspiration where suddenly the solution will
-come to me. I&rsquo;ll excitedly start up a new conversation and start working through
-it with the model.</li>
-</ol>
-<p>The key is the emotional reaction I have immediately to the LLM&rsquo;s response, either
-<strong>excitement or frustration</strong>. By harnessing this immediate feedback loop, I
-get my brain out of its passive, procrastination mode. It&rsquo;s almost like a jolt:
-either I&rsquo;m thrilled because it&rsquo;s simpler than I thought, or I&rsquo;m spurred to action
-by the urge to correct a perceived &lsquo;wrong&rsquo; answer. This forces me to engage with
-the problem in a meaningful way.</p>
-<p>For what it&rsquo;s worth, this experience is very similar to talking through a problem with
-another engineer: the advantage of LLMs is that it&rsquo;s available 24/7 and I never have to worry
-about my problem being &ldquo;too insignificant&rdquo; to bother someone with.
-The simple act of articulating my thoughts and hearing a response seems sufficient,
-regardless of the response&rsquo;s quality.</p><div style="margin-top: 1rem; margin-bottom: 1rem;">
-        <a href="/llm-motivation-via-emotions/" class="text-sm opacity-60 hover:opacity-100 hover:underline">Continue reading →</a>
-      </div></div>
-</article><hr style="border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3); margin-top: 0.25rem; margin-bottom: 0.25rem;"><article class="mb-2 pb-2 first-of-type:mt-0">
-  <h1 class="!mt-0 !mb-1 !text-base !font-bold"><a href="/hw-encoding-raspi/" class="!text-black dark:!text-white !no-underline hover:!underline">V4L2 and Hardware Encoding on the Raspberry Pi</a></h1>
-  <time class="block text-xs" style="margin-bottom: 0.5rem; opacity: 0.4;">Feb 1, 2021</time>
-  <div><p><strong>TLDR</strong>: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on
-the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding
-and encoding on Linux.</p>
-<p><strong>Background</strong></p>
-<p>My journey started at <a href="https://www.youtube.com/watch?v=CyEpshm16HY&amp;t=139s">this video</a>
-on the excellent <a href="https://www.youtube.com/channel/UCp3yVOm6A55nx65STpm3tXQ">Craft Computing</a> YouTube channel
-which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi.
-Behind the scenes, TinyPilot uses <a href="https://github.com/pikvm/ustreamer">ustreamer</a> to read frames
-from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the
-MJPEG output, support was recently added for encoding video using H264.</p>
-<p>Even after messing with the source code, I could not get the H264 encoding working on my Pi running
-64-bit Ubuntu with an error message of <code>Can't create MMAL wrapper</code>. Digging further, I ran into some
-insurmountable roadblocks with the approach taken by ustreamer and discovered the complex state of
-hardware encoding on the Pi.</p>
-<p>In short, there are three userspace APIs for accessing the HW encoding and decoding on the
-Pi&rsquo;s Broadcom chip:</p>
-<ol>
-<li><strong>OpenMAX Integration Layer (OpenMAX IL)</strong></li>
-</ol>
-<ul>
-<li>This API came directly from Broadcom and was the original way to access hardware codecs.</li>
-<li>Support was dropped by Broadcom a long time ago and there appears to be
-<a href="https://github.com/raspberrypi/Raspberry-Pi-OS-64bit/issues/98#issuecomment-715321951">no hope of it</a>
-ever working on 64-bit OSes.</li>
-<li>ustreamer <a href="https://github.com/pikvm/ustreamer/blob/master/src/ustreamer/encoders/omx/encoder.c">uses this API</a>
-to perform MJPEG encoding when specifically requested by the user.</li>
-</ul>
-<ol start="2">
-<li><strong>Multimedia Abstraction Layer (MMAL)</strong></li>
-</ol>
-<ul>
-<li>This API was developed by the Pi developers as a replacement for OpenMAX and backs tools like
-<code>raspistill</code> and <code>raspivid</code>.</li>
-<li>While support for 64-bit was added
-<a href="https://github.com/raspberrypi/userland/commit/7d3c6b9f4c3ddeecefdeb2b882bada74a235249b">at one point</a>,
-it was subsequently
-<a href="https://github.com/raspberrypi/userland/commit/f97b1af1b3e653f9da2c1a3643479bfd469e3b74">reverted</a> and,
-currently, does not work.</li>
-<li>ustreamer uses <a href="https://github.com/pikvm/ustreamer/blob/master/src/ustreamer/h264/encoder.c">this API</a>
-to perform H264 encoding to shared memory.</li>
-</ul>
-<ol start="3">
-<li><strong>Video4Linux2 Memory to Memory (V4L2 M2M)</strong></li>
-</ol>
-<ul>
-<li>V4L2 is Linux API which was historically used for video capture and output. In 2010, the M2M API
-was added, significantly extending V4L2 and adding support for video codecs.</li>
-<li>The Raspberry Pi kernel <a href="https://github.com/raspberrypi/linux/blob/rpi-5.11.y/drivers/staging/vc04_services/bcm2835-codec/bcm2835-v4l2-codec.c">has a driver</a>
-which uses MMAL APIs in kernelspace and integrates with the rest of V4L2.</li>
-<li>Since this is just a generic kernel API, it works out of the box on 64-bit OSes with programs
-including ffmpeg using it.</li>
-</ul>
-<p>Since digging into the internals of MMAL seemed complex, even to knowledgable folks in the Pi community,
-I decided to try to moving ustreamer&rsquo;s H264 encoding to use V4L2 instead. As a side benefit, since we&rsquo;re
-using Linux kernel APIs, this should also futureproof this code to any new revisions of the Pi.</p>
-<p>I quickly ran into the fact that, while lots of people have used V42L for cameras and webcams,
-only the big projects like GStreamer and ffmpeg use it for encoding. This meant there was no simple guide
-or example I could follow. However, with a lot of poring over kernel documentation and
-trial and error, I learnt enough to successfully perform H264 hardware encoding using V4L2 and
-<a href="https://github.com/LalitMaganti/ustreamer/commit/a14822a03da74c429928060d99a06e7a0a39d030">modified ustreamer</a>
-to support it.</p>
-<p><strong>Using V4L2: step by step</strong></p>
-<p>Generally, V4L2 works in either &ldquo;capture&rdquo; (frames being read off a device e.g. camera or webcam) or
-&ldquo;output&rdquo; (frames being sent to a device e.g. a graphics card) M2M combines &ldquo;capture&rdquo; and
-&ldquo;output&rdquo; into a single mode which allows arbitrary transformations of frames. Video encoding is the
-obvious example of this but decoding is also supported.</p>
-<p><img src="/img/hw-encoding-raspi/v4l2.png" alt="Diagram for V4L2 APIs"></p>
-<p>All communication with the hardware encoder on the Pi is done by opening a special device in
-<code>/dev</code> (<code>/dev/video11</code> to be precise), performing <code>ioctls</code> on the file descriptor to control the
-encoding and using mmap-ed memory to pass the frames between userspace and kernelspace.</p>
-<p>There are two phases to the encoding process: setup and streaming. In the setup phase, we tell the encoder
-about things like the pixel format, resolution, frame rate and setup the buffers to pass the frames.
-The streaming phase involves writing the next raw frame of data to the kernel and reading back the
-encoded frame.</p>
-<p><em>Note: all error handling is omitted to make the code snippets smaller.</em></p>
-<p><strong>Setup</strong></p>
-<p>First, we open the special device for the video encoder. This gives an fd we can use for <code>ioctls</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;linux/videodev2.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> fd <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#34;/dev/video11&#34;</span>, O_RDWR);
-</span></span></code></pre></div><p>Next, we setup the &ldquo;output&rdquo; and &ldquo;capture&rdquo; devices; the most important things to set are resolution
-and pixel format. The &ldquo;capture&rdquo; device will be implicitly set to produce H264 frames with the same
-pixel format as the output but the resolution needs to be set manually.</p>
-<p><em>Note: confusingly &ldquo;output&rdquo; here refers to the raw frames being encoded and &ldquo;capture&rdquo; to the encoded H264
-output frames. A good way to think about this is to consider how V4L2 was originally designed:
-frames are sent to output devices like graphics cards and read from capture devices like cameras.</em></p>
-<p>For 1080p raw frames in <a href="">YUYV format</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_format</span> fm;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_pix_format_mplane</span> <span style="color:#f92672">*</span>mp <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>fm.fmt.pix_mp;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>fm.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_G_FMT, <span style="color:#f92672">&amp;</span>fm);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1920</span>;
-</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>height <span style="color:#f92672">=</span> <span style="color:#ae81ff">1080</span>;
-</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>pixelformat <span style="color:#f92672">=</span> V4L2_PIX_FMT_YUYV;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_S_FMT, <span style="color:#f92672">&amp;</span>fm);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>fm.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_G_FMT, <span style="color:#f92672">&amp;</span>fm);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1920</span>;
-</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>height <span style="color:#f92672">=</span> <span style="color:#ae81ff">1080</span>;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_S_FMT, <span style="color:#f92672">&amp;</span>fm);
-</span></span></code></pre></div><p>Now, we set the inter-frame interval to indirectly set the frame rate. For a 30FPS video:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_streamparm</span> stream;
-</span></span><span style="display:flex;"><span>memset(<span style="color:#f92672">&amp;</span>stream, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(stream));
-</span></span><span style="display:flex;"><span>stream.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-</span></span><span style="display:flex;"><span>stream.parm.output.timeperframe.numerator <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-</span></span><span style="display:flex;"><span>stream.parm.output.timeperframe.denominator <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_S_PARM, <span style="color:#f92672">&amp;</span>stream);
-</span></span></code></pre></div><p>The most complex part of the setup is configuring the mmap buffers to send and receive frames.
-Since we&rsquo;re not trying to be performant, we use one capture buffer and one output buffer.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> start;
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> length;
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_buffer</span> inner;
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_plane</span> plane;
-</span></span><span style="display:flex;"><span>};
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// mmaps the buffers for the given type of device (capture or output).
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">int</span> fd, <span style="color:#66d9ef">uint32_t</span> type, <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span><span style="color:#f92672">*</span> buffer) {
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_buffer</span> <span style="color:#f92672">*</span>inner <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>buffer<span style="color:#f92672">-&gt;</span>inner;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  memset(inner, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(<span style="color:#f92672">*</span>inner));
-</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>type <span style="color:#f92672">=</span> type;
-</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>memory <span style="color:#f92672">=</span> V4L2_MEMORY_MMAP;
-</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>index <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>length <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>m.planes <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>buffer<span style="color:#f92672">-&gt;</span>plane;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  ioctl(fd, VIDIOC_QUERYBUF, inner);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  buffer<span style="color:#f92672">-&gt;</span>length <span style="color:#f92672">=</span> inner<span style="color:#f92672">-&gt;</span>m.planes[<span style="color:#ae81ff">0</span>].length;
-</span></span><span style="display:flex;"><span>  buffer<span style="color:#f92672">-&gt;</span>start <span style="color:#f92672">=</span> mmap(NULL, buffer<span style="color:#f92672">-&gt;</span>length, PROT_READ <span style="color:#f92672">|</span> PROT_WRITE,
-</span></span><span style="display:flex;"><span>      MAP_SHARED, fd, inner<span style="color:#f92672">-&gt;</span>m.planes[<span style="color:#ae81ff">0</span>].m.mem_offset);
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_requestbuffers</span> buf;
-</span></span><span style="display:flex;"><span>buf.memory <span style="color:#f92672">=</span> V4L2_MEMORY_MMAP;
-</span></span><span style="display:flex;"><span>buf.count <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> output;
-</span></span><span style="display:flex;"><span>buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_REQBUFS, <span style="color:#f92672">&amp;</span>buf);
-</span></span><span style="display:flex;"><span>map(fd, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, <span style="color:#f92672">&amp;</span>output);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> capture;
-</span></span><span style="display:flex;"><span>buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_REQBUFS, <span style="color:#f92672">&amp;</span>buf);
-</span></span><span style="display:flex;"><span>map(fd, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, <span style="color:#f92672">&amp;</span>capture);
-</span></span></code></pre></div><p>Next, we &ldquo;queue&rdquo; up the capture and output buffers. This tells the encoder that it has exclusive
-access to these buffers until we dequeue them.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>capture<span style="color:#f92672">-&gt;</span>inner);
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>output<span style="color:#f92672">-&gt;</span>inner);
-</span></span></code></pre></div><p>Finally, we start the streaming process; this tells the kernel that it should start
-reading raw frames from the output buffer and writing encoded frames to the capture buffer:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_STREAMON, <span style="color:#f92672">&amp;</span>type);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_STREAMON, <span style="color:#f92672">&amp;</span>type);
-</span></span></code></pre></div><div style="margin-top: 1rem; margin-bottom: 1rem;">
-        <a href="/hw-encoding-raspi/" class="text-sm opacity-60 hover:opacity-100 hover:underline">Continue reading →</a>
-      </div></div>
-</article><hr style="border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3); margin-top: 0.25rem; margin-bottom: 0.25rem;"></main><footer
-  class="mx-auto flex h-[4.5rem] max-w-(--w) items-center px-8 text-xs tracking-wider uppercase opacity-60"
->
-  <div class="mr-auto">&copy;2025
-    <a class="link" href="/">Lalit Maganti</a></div>
-  <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
-    >powered by hugo️️</a
-  >️
-  <a
-    class="link"
-    href="https://github.com/nanxiaobei/hugo-paper"
-    rel="noopener"
-    target="_blank"
-    >hugo-paper</a
-  >
-</footer>
-</body>
-</html>
+mattered. The difference now is that there’s much higher ROI in doing them than
+there used to be.</p><p>In other words, we used to write docs for humans. Now, we’re also writing for
+AIs that help humans. That shift changes the economics of good documentation in
+a big way.</p></div></article><hr style="border:0;border-top:1px solid rgba(128,128,128,.3);margin-top:.25rem;margin-bottom:.25rem"><article class="mb-2 pb-2 first-of-type:mt-0"><h1 class="!mt-0 !mb-1 !text-base !font-bold"><a href=/llm-motivation-via-emotions/ class="!text-black dark:!text-white !no-underline hover:!underline">Harnessing Frustration: Using LLMs to Overcome Activation Energy</a></h1><time class="block text-xs" style=margin-bottom:.5rem;opacity:.4>Jul 14, 2025</time><div><p>One of my biggest weaknesses as a software engineer is procrastination when
+facing a new project. When the scope is unclear, I have a tendency to wait until
+I feel I&rsquo;ve &ldquo;felt out&rdquo; the problem to start doing anything. I know I&rsquo;ll feel
+better and work much faster when I get &ldquo;stuck in&rdquo; but I still struggle with that
+first step, overcoming the &ldquo;activation energy&rdquo; required to engage with the
+details.</p><div style=margin-top:1rem;margin-bottom:1rem><a href=/llm-motivation-via-emotions/ class="text-sm opacity-60 hover:opacity-100 hover:underline">Continue reading →</a></div></div></article><hr style="border:0;border-top:1px solid rgba(128,128,128,.3);margin-top:.25rem;margin-bottom:.25rem"><article class="mb-2 pb-2 first-of-type:mt-0"><h1 class="!mt-0 !mb-1 !text-base !font-bold"><a href=/hw-encoding-raspi/ class="!text-black dark:!text-white !no-underline hover:!underline">V4L2 and Hardware Encoding on the Raspberry Pi</a></h1><time class="block text-xs" style=margin-bottom:.5rem;opacity:.4>Feb 1, 2021</time><div><p><strong>TLDR</strong>: Explain how the V4L2 M2M API works through the use-case of
+implementing hardware video encoding on the Raspberry Pi. This knowledge is
+generally useful as V4L2 is the de-facto generic API for hardware decoding and
+encoding on Linux.</p><p><strong>Background</strong></p><p>My journey started at
+<a href="https://www.youtube.com/watch?v=CyEpshm16HY&amp;t=139s">this video</a> on the
+excellent
+<a href=https://www.youtube.com/channel/UCp3yVOm6A55nx65STpm3tXQ>Craft Computing</a>
+YouTube channel which showed how to setup TinyPilot, a Python app for KVM over
+IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses
+<a href=https://github.com/pikvm/ustreamer>ustreamer</a> to read frames from a HDMI
+capture card and either exposes it over HTTP or writes it to shared memory.
+Along with the MJPEG output, support was recently added for encoding video using
+H264.</p><div style=margin-top:1rem;margin-bottom:1rem><a href=/hw-encoding-raspi/ class="text-sm opacity-60 hover:opacity-100 hover:underline">Continue reading →</a></div></div></article><hr style="border:0;border-top:1px solid rgba(128,128,128,.3);margin-top:.25rem;margin-bottom:.25rem"></main><footer class="mx-auto flex h-[4.5rem] max-w-(--w) items-center px-8 text-xs tracking-wider uppercase opacity-60"><div class=mr-auto>&copy;2025
+<a class=link href=/>Lalit Maganti</a></div><a class="link mx-6" href=https://gohugo.io/ rel=noopener target=_blank>powered by hugo️️</a>️
+<a class=link href=https://github.com/nanxiaobei/hugo-paper rel=noopener target=_blank>hugo-paper</a></footer></body></html>

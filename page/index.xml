@@ -1,18 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Pages on Lalit Maganti</title>
-    <link>/page/</link>
-    <description>Recent content in Pages on Lalit Maganti</description>
-    <generator>Hugo</generator>
-    <language>en</language>
-    <atom:link href="/page/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>About</title>
-      <link>/page/about/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/page/about/</guid>
-      <description>&lt;p&gt;I&amp;rsquo;m a software engineer working at Google on &lt;a href=&#34;https://perfetto.dev&#34;&gt;Perfetto&lt;/a&gt;, a suite of open source tracing tools helping developers understand the behaviour and performance of complex systems. This includes both Android and Chrome where Perfetto is the default tracing system. Perfetto is also used by many other products in Google and by other companies in the industry. My main work is with the&#xA;&lt;a href=&#34;https://perfetto.dev/docs/analysis/trace-processor&#34;&gt;trace processor&lt;/a&gt;, a C++ library that imports&#xA;traces in a wide variety of formats and exposes an SQL interface for querying their contents.&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on Lalit Maganti</title><link>/page/</link><description>Recent content in Pages on Lalit Maganti</description><generator>Hugo</generator><language>en</language><atom:link href="/page/index.xml" rel="self" type="application/rss+xml"/><item><title>About</title><link>/page/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/page/about/</guid><description>&lt;p&gt;I&amp;rsquo;m a software engineer working at Google on &lt;a href="https://perfetto.dev"&gt;Perfetto&lt;/a&gt;, a
+suite of open source tracing tools helping developers understand the behaviour
+and performance of complex systems. This includes both Android and Chrome where
+Perfetto is the default tracing system. Perfetto is also used by many other
+products in Google and by other companies in the industry. My main work is with
+the &lt;a href="https://perfetto.dev/docs/analysis/trace-processor"&gt;trace processor&lt;/a&gt;, a C++
+library that imports traces in a wide variety of formats and exposes an SQL
+interface for querying their contents.&lt;/p&gt;</description></item></channel></rss>

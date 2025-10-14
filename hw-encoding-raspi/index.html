@@ -1,711 +1,215 @@
-<!doctype html>
-
-
-
-
-
-
-
-<html
-  class="not-ready lg:text-base"
-  style="--bg:#faf8f1"
-  lang="en"
-  dir="ltr"
-><head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, shrink-to-fit=no"
-  />
-
-  
-  <title>V4L2 and Hardware Encoding on the Raspberry Pi - Lalit Maganti</title>
-
-  
-  <meta name="theme-color" />
-
-  <meta name="description" content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on
-the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding
-and encoding on Linux.
+<!doctype html><html class="not-ready lg:text-base" style=--bg:#faf8f1 lang=en dir=ltr><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>V4L2 and Hardware Encoding on the Raspberry Pi - Lalit Maganti</title><meta name=theme-color><meta name=description content="TLDR: Explain how the V4L2 M2M API works through the use-case of
+implementing hardware video encoding on the Raspberry Pi. This knowledge is
+generally useful as V4L2 is the de-facto generic API for hardware decoding and
+encoding on Linux.
 Background
-My journey started at this video
-on the excellent Craft Computing YouTube channel
-which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi.
-Behind the scenes, TinyPilot uses ustreamer to read frames
-from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the
-MJPEG output, support was recently added for encoding video using H264.
-Even after messing with the source code, I could not get the H264 encoding working on my Pi running
-64-bit Ubuntu with an error message of Can&#39;t create MMAL wrapper. Digging further, I ran into some
-insurmountable roadblocks with the approach taken by ustreamer and discovered the complex state of
-hardware encoding on the Pi.
-In short, there are three userspace APIs for accessing the HW encoding and decoding on the
-Pi&rsquo;s Broadcom chip:
-
-OpenMAX Integration Layer (OpenMAX IL)
-
-
-This API came directly from Broadcom and was the original way to access hardware codecs.
-Support was dropped by Broadcom a long time ago and there appears to be
-no hope of it
-ever working on 64-bit OSes.
-ustreamer uses this API
-to perform MJPEG encoding when specifically requested by the user.
-
-
-Multimedia Abstraction Layer (MMAL)
-
-
-This API was developed by the Pi developers as a replacement for OpenMAX and backs tools like
-raspistill and raspivid.
-While support for 64-bit was added
-at one point,
+My journey started at
+this video on the
+excellent
+Craft Computing
+YouTube channel which showed how to setup TinyPilot, a Python app for KVM over
+IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses
+ustreamer to read frames from a HDMI
+capture card and either exposes it over HTTP or writes it to shared memory.
+Along with the MJPEG output, support was recently added for encoding video using
+H264."><meta name=author content="Lalit Maganti"><link rel="preload stylesheet" as=style href=/main.min.css><style>article{font-size:.9375rem!important;line-height:1.6!important}article header h1,article>header>h1,article>h1{font-size:1rem!important;line-height:1.6!important;font-weight:700!important}article h1 a{font-weight:700!important}main.prose>*:first-child,main.prose>*:first-child>*:first-child{margin-top:0!important}main{padding-top:1rem!important}</style><link rel=preload as=image href=/theme.png><link rel=preload as=image href=/github.svg><link rel=preload as=image href=/linkedin.svg><link rel=preload as=image href=/rss.svg><script defer src=/highlight.min.js onload=hljs.initHighlightingOnLoad()></script><link rel=icon href=/favicon.ico><link rel=apple-touch-icon href=/apple-touch-icon.png><meta name=generator content="Hugo 0.151.0"><script async src="https://www.googletagmanager.com/gtag/js?id=G-CPF1NN7N28"></script><script>var dnt,doNotTrack=!1;if(!1&&(dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes"),!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-CPF1NN7N28")}</script><meta itemprop=name content="V4L2 and Hardware Encoding on the Raspberry Pi"><meta itemprop=description content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
+Background
+My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses ustreamer to read frames from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the MJPEG output, support was recently added for encoding video using H264."><meta itemprop=datePublished content="2021-02-01T23:00:00+00:00"><meta itemprop=dateModified content="2021-02-01T23:00:00+00:00"><meta itemprop=wordCount content="1552"><meta property="og:url" content="/hw-encoding-raspi/"><meta property="og:site_name" content="Lalit Maganti"><meta property="og:title" content="V4L2 and Hardware Encoding on the Raspberry Pi"><meta property="og:description" content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
+Background
+My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses ustreamer to read frames from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the MJPEG output, support was recently added for encoding video using H264."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2021-02-01T23:00:00+00:00"><meta property="article:modified_time" content="2021-02-01T23:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="V4L2 and Hardware Encoding on the Raspberry Pi"><meta name=twitter:description content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
+Background
+My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses ustreamer to read frames from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the MJPEG output, support was recently added for encoding video using H264."><link rel=canonical href=/hw-encoding-raspi/></head><body class="bg-(--bg) text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white"><header class="mx-auto flex h-[4.5rem] max-w-(--w) px-8 whitespace-nowrap lg:justify-center"><div class="relative z-50 flex items-center ltr:mr-auto rtl:ml-auto"><a class="-translate-y-[1px] text-2xl font-medium" href=/>Lalit Maganti</a><div class="btn-dark text-[0px] ltr:ml-4 rtl:mr-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.png)_left_center/_auto_theme('spacing.6')_no-repeat] [transition:_background-position_0.4s_steps(5)] dark:[background-position:right]" role=button aria-label=Dark></div></div><div class="btn-menu relative z-50 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden ltr:-mr-8 rtl:-ml-8" role=button aria-label=Menu></div><script>const htmlClass=document.documentElement.classList;setTimeout(()=>{htmlClass.remove("not-ready")},10);const btnMenu=document.querySelector(".btn-menu");btnMenu.addEventListener("click",()=>{htmlClass.toggle("open")});const metaTheme=document.querySelector('meta[name="theme-color"]'),lightBg="#faf8f1".replace(/"/g,""),setDark=e=>{metaTheme.setAttribute("content",e?"#000":lightBg),htmlClass[e?"add":"remove"]("dark"),localStorage.setItem("dark",e)},darkScheme=window.matchMedia("(prefers-color-scheme: dark)");if(htmlClass.contains("dark"))setDark(!0);else{const e=localStorage.getItem("dark");setDark(e?e==="true":darkScheme.matches)}darkScheme.addEventListener("change",e=>{setDark(e.matches)});const btnDark=document.querySelector(".btn-dark");btnDark.addEventListener("click",()=>{setDark(localStorage.getItem("dark")!=="true")})</script><div class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-(--bg) pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none"><nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-10 rtl:space-x-reverse"><a class="block text-center text-xl leading-[5rem] lg:text-base lg:font-normal" href=/page/about/>About</a></nav><nav class="mt-12 flex justify-center space-x-10 lg:mt-0 lg:items-center ltr:lg:ml-14 rtl:space-x-reverse rtl:lg:mr-14 dark:invert"><a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./github.svg) href=https://github.com/LalitMaganti target=_blank rel=me>github</a>
+<a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./linkedin.svg) href=https://linkedin.com/in/lalit-maganti-18b73a9a target=_blank rel=me>linkedin</a>
+<a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./rss.svg) href=/index.xml target=_blank rel=alternate>rss</a></nav></div></header><main class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-0 pb-16" style=margin-top:0><article><header class=mb-4><h1 class="!mt-0 !mb-1 !text-base !font-bold">V4L2 and Hardware Encoding on the Raspberry Pi</h1><time class="block text-xs" style=margin-bottom:.5rem;opacity:.4>Feb 1, 2021</time></header><section><p><strong>TLDR</strong>: Explain how the V4L2 M2M API works through the use-case of
+implementing hardware video encoding on the Raspberry Pi. This knowledge is
+generally useful as V4L2 is the de-facto generic API for hardware decoding and
+encoding on Linux.</p><p><strong>Background</strong></p><p>My journey started at
+<a href="https://www.youtube.com/watch?v=CyEpshm16HY&amp;t=139s">this video</a> on the
+excellent
+<a href=https://www.youtube.com/channel/UCp3yVOm6A55nx65STpm3tXQ>Craft Computing</a>
+YouTube channel which showed how to setup TinyPilot, a Python app for KVM over
+IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses
+<a href=https://github.com/pikvm/ustreamer>ustreamer</a> to read frames from a HDMI
+capture card and either exposes it over HTTP or writes it to shared memory.
+Along with the MJPEG output, support was recently added for encoding video using
+H264.</p><p>Even after messing with the source code, I could not get the H264 encoding
+working on my Pi running 64-bit Ubuntu with an error message of
+<code>Can't create MMAL wrapper</code>. Digging further, I ran into some insurmountable
+roadblocks with the approach taken by ustreamer and discovered the complex state
+of hardware encoding on the Pi.</p><p>In short, there are three userspace APIs for accessing the HW encoding and
+decoding on the Pi&rsquo;s Broadcom chip:</p><ol><li><strong>OpenMAX Integration Layer (OpenMAX IL)</strong></li></ol><ul><li>This API came directly from Broadcom and was the original way to access
+hardware codecs.</li><li>Support was dropped by Broadcom a long time ago and there appears to be
+<a href=https://github.com/raspberrypi/Raspberry-Pi-OS-64bit/issues/98#issuecomment-715321951>no hope of it</a>
+ever working on 64-bit OSes.</li><li>ustreamer
+<a href=https://github.com/pikvm/ustreamer/blob/master/src/ustreamer/encoders/omx/encoder.c>uses this API</a>
+to perform MJPEG encoding when specifically requested by the user.</li></ul><ol start=2><li><strong>Multimedia Abstraction Layer (MMAL)</strong></li></ol><ul><li>This API was developed by the Pi developers as a replacement for OpenMAX and
+backs tools like <code>raspistill</code> and <code>raspivid</code>.</li><li>While support for 64-bit was added
+<a href=https://github.com/raspberrypi/userland/commit/7d3c6b9f4c3ddeecefdeb2b882bada74a235249b>at one point</a>,
 it was subsequently
-reverted and,
-currently, does not work.
-ustreamer uses this API
-to perform H264 encoding to shared memory.
-
-
-Video4Linux2 Memory to Memory (V4L2 M2M)
-
-
-V4L2 is Linux API which was historically used for video capture and output. In 2010, the M2M API
-was added, significantly extending V4L2 and adding support for video codecs.
-The Raspberry Pi kernel has a driver
-which uses MMAL APIs in kernelspace and integrates with the rest of V4L2.
-Since this is just a generic kernel API, it works out of the box on 64-bit OSes with programs
-including ffmpeg using it.
-
-Since digging into the internals of MMAL seemed complex, even to knowledgable folks in the Pi community,
-I decided to try to moving ustreamer&rsquo;s H264 encoding to use V4L2 instead. As a side benefit, since we&rsquo;re
-using Linux kernel APIs, this should also futureproof this code to any new revisions of the Pi.
-I quickly ran into the fact that, while lots of people have used V42L for cameras and webcams,
-only the big projects like GStreamer and ffmpeg use it for encoding. This meant there was no simple guide
-or example I could follow. However, with a lot of poring over kernel documentation and
-trial and error, I learnt enough to successfully perform H264 hardware encoding using V4L2 and
-modified ustreamer
-to support it.
-Using V4L2: step by step
-Generally, V4L2 works in either &ldquo;capture&rdquo; (frames being read off a device e.g. camera or webcam) or
-&ldquo;output&rdquo; (frames being sent to a device e.g. a graphics card) M2M combines &ldquo;capture&rdquo; and
-&ldquo;output&rdquo; into a single mode which allows arbitrary transformations of frames. Video encoding is the
-obvious example of this but decoding is also supported.
-
-All communication with the hardware encoder on the Pi is done by opening a special device in
-/dev (/dev/video11 to be precise), performing ioctls on the file descriptor to control the
-encoding and using mmap-ed memory to pass the frames between userspace and kernelspace.
-There are two phases to the encoding process: setup and streaming. In the setup phase, we tell the encoder
-about things like the pixel format, resolution, frame rate and setup the buffers to pass the frames.
-The streaming phase involves writing the next raw frame of data to the kernel and reading back the
-encoded frame.
-Note: all error handling is omitted to make the code snippets smaller.
-Setup
-First, we open the special device for the video encoder. This gives an fd we can use for ioctls.
-#include &lt;linux/videodev2.h&gt;
-
-int fd = open(&#34;/dev/video11&#34;, O_RDWR);
-Next, we setup the &ldquo;output&rdquo; and &ldquo;capture&rdquo; devices; the most important things to set are resolution
-and pixel format. The &ldquo;capture&rdquo; device will be implicitly set to produce H264 frames with the same
-pixel format as the output but the resolution needs to be set manually.
-Note: confusingly &ldquo;output&rdquo; here refers to the raw frames being encoded and &ldquo;capture&rdquo; to the encoded H264
-output frames. A good way to think about this is to consider how V4L2 was originally designed:
-frames are sent to output devices like graphics cards and read from capture devices like cameras.
-For 1080p raw frames in YUYV format:
-struct v4l2_format fm;
-struct v4l2_pix_format_mplane *mp = &amp;fm.fmt.pix_mp;
-
-fm.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-ioctl(fd, VIDIOC_G_FMT, &amp;fm);
-
-mp-&gt;width = 1920;
-mp-&gt;height = 1080;
-mp-&gt;pixelformat = V4L2_PIX_FMT_YUYV;
-ioctl(fd, VIDIOC_S_FMT, &amp;fm);
-
-fm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-ioctl(fd, VIDIOC_G_FMT, &amp;fm);
-
-mp-&gt;width = 1920;
-mp-&gt;height = 1080;
-ioctl(fd, VIDIOC_S_FMT, &amp;fm);
-Now, we set the inter-frame interval to indirectly set the frame rate. For a 30FPS video:
-struct v4l2_streamparm stream;
-memset(&amp;stream, 0, sizeof(stream));
-stream.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-stream.parm.output.timeperframe.numerator = 1;
-stream.parm.output.timeperframe.denominator = 30;
-
-ioctl(fd, VIDIOC_S_PARM, &amp;stream);
-The most complex part of the setup is configuring the mmap buffers to send and receive frames.
-Since we&rsquo;re not trying to be performant, we use one capture buffer and one output buffer.
-struct buffer {
-  void* start;
-  int length;
-  struct v4l2_buffer inner;
-  struct v4l2_plane plane;
-};
-
-// mmaps the buffers for the given type of device (capture or output).
-void map(int fd, uint32_t type, struct buffer* buffer) {
-  struct v4l2_buffer *inner = &amp;buffer-&gt;inner;
-
-  memset(inner, 0, sizeof(*inner));
-  inner-&gt;type = type;
-  inner-&gt;memory = V4L2_MEMORY_MMAP;
-  inner-&gt;index = 0;
-  inner-&gt;length = 1;
-  inner-&gt;m.planes = &amp;buffer-&gt;plane;
-
-  ioctl(fd, VIDIOC_QUERYBUF, inner);
-
-  buffer-&gt;length = inner-&gt;m.planes[0].length;
-  buffer-&gt;start = mmap(NULL, buffer-&gt;length, PROT_READ | PROT_WRITE,
-      MAP_SHARED, fd, inner-&gt;m.planes[0].m.mem_offset);
-}
-
-struct v4l2_requestbuffers buf;
-buf.memory = V4L2_MEMORY_MMAP;
-buf.count = 1;
-
-struct buffer output;
-buf.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-ioctl(fd, VIDIOC_REQBUFS, &amp;buf);
-map(fd, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, &amp;output);
-
-struct buffer capture;
-buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-ioctl(fd, VIDIOC_REQBUFS, &amp;buf);
-map(fd, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, &amp;capture);
-Next, we &ldquo;queue&rdquo; up the capture and output buffers. This tells the encoder that it has exclusive
-access to these buffers until we dequeue them.
-ioctl(fd, VIDIOC_QBUF, &amp;capture-&gt;inner);
-ioctl(fd, VIDIOC_QBUF, &amp;output-&gt;inner);
-Finally, we start the streaming process; this tells the kernel that it should start
-reading raw frames from the output buffer and writing encoded frames to the capture buffer:
-int type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-ioctl(fd, VIDIOC_STREAMON, &amp;type);
-
-type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-ioctl(fd, VIDIOC_STREAMON, &amp;type);
-" />
-  <meta name="author" content="Lalit Maganti" /><link rel="preload stylesheet" as="style" href="/main.min.css" />
-
-  <style>
-    article {
-      font-size: 0.9375rem !important;
-      line-height: 1.6 !important;
-    }
-    article header h1,
-    article > header > h1,
-    article > h1 {
-      font-size: 1rem !important;
-      line-height: 1.6 !important;
-      font-weight: 700 !important;
-    }
-    article h1 a {
-      font-weight: 700 !important;
-    }
-    main.prose > *:first-child,
-    main.prose > *:first-child > *:first-child {
-      margin-top: 0 !important;
-    }
-    main {
-      padding-top: 1rem !important;
-    }
-  </style>
-
-  
-  <link rel="preload" as="image" href="/theme.png" />
-
-  
-
-  <link rel="preload" as="image" href="/github.svg" /><link rel="preload" as="image" href="/linkedin.svg" /><link rel="preload" as="image" href="/rss.svg" />
-
-  <script
-    defer
-    src="/highlight.min.js"
-    onload="hljs.initHighlightingOnLoad();"
-  ></script>
-
-  
-  <link
-    rel="icon"
-    href="/favicon.ico"
-  />
-  <link
-    rel="apple-touch-icon"
-    href="/apple-touch-icon.png"
-  />
-
-  <meta name="generator" content="Hugo 0.148.1">
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPF1NN7N28"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-CPF1NN7N28');
-        }
-      </script>
-  <meta itemprop="name" content="V4L2 and Hardware Encoding on the Raspberry Pi">
-  <meta itemprop="description" content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
-Background
-My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses ustreamer to read frames from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the MJPEG output, support was recently added for encoding video using H264.
-Even after messing with the source code, I could not get the H264 encoding working on my Pi running 64-bit Ubuntu with an error message of Can&#39;t create MMAL wrapper. Digging further, I ran into some insurmountable roadblocks with the approach taken by ustreamer and discovered the complex state of hardware encoding on the Pi.
-In short, there are three userspace APIs for accessing the HW encoding and decoding on the Pi’s Broadcom chip:
-OpenMAX Integration Layer (OpenMAX IL) This API came directly from Broadcom and was the original way to access hardware codecs. Support was dropped by Broadcom a long time ago and there appears to be no hope of it ever working on 64-bit OSes. ustreamer uses this API to perform MJPEG encoding when specifically requested by the user. Multimedia Abstraction Layer (MMAL) This API was developed by the Pi developers as a replacement for OpenMAX and backs tools like raspistill and raspivid. While support for 64-bit was added at one point, it was subsequently reverted and, currently, does not work. ustreamer uses this API to perform H264 encoding to shared memory. Video4Linux2 Memory to Memory (V4L2 M2M) V4L2 is Linux API which was historically used for video capture and output. In 2010, the M2M API was added, significantly extending V4L2 and adding support for video codecs. The Raspberry Pi kernel has a driver which uses MMAL APIs in kernelspace and integrates with the rest of V4L2. Since this is just a generic kernel API, it works out of the box on 64-bit OSes with programs including ffmpeg using it. Since digging into the internals of MMAL seemed complex, even to knowledgable folks in the Pi community, I decided to try to moving ustreamer’s H264 encoding to use V4L2 instead. As a side benefit, since we’re using Linux kernel APIs, this should also futureproof this code to any new revisions of the Pi.
-I quickly ran into the fact that, while lots of people have used V42L for cameras and webcams, only the big projects like GStreamer and ffmpeg use it for encoding. This meant there was no simple guide or example I could follow. However, with a lot of poring over kernel documentation and trial and error, I learnt enough to successfully perform H264 hardware encoding using V4L2 and modified ustreamer to support it.
-Using V4L2: step by step
-Generally, V4L2 works in either “capture” (frames being read off a device e.g. camera or webcam) or “output” (frames being sent to a device e.g. a graphics card) M2M combines “capture” and “output” into a single mode which allows arbitrary transformations of frames. Video encoding is the obvious example of this but decoding is also supported.
-All communication with the hardware encoder on the Pi is done by opening a special device in /dev (/dev/video11 to be precise), performing ioctls on the file descriptor to control the encoding and using mmap-ed memory to pass the frames between userspace and kernelspace.
-There are two phases to the encoding process: setup and streaming. In the setup phase, we tell the encoder about things like the pixel format, resolution, frame rate and setup the buffers to pass the frames. The streaming phase involves writing the next raw frame of data to the kernel and reading back the encoded frame.
-Note: all error handling is omitted to make the code snippets smaller.
-Setup
-First, we open the special device for the video encoder. This gives an fd we can use for ioctls.
-#include &lt;linux/videodev2.h&gt; int fd = open(&#34;/dev/video11&#34;, O_RDWR); Next, we setup the “output” and “capture” devices; the most important things to set are resolution and pixel format. The “capture” device will be implicitly set to produce H264 frames with the same pixel format as the output but the resolution needs to be set manually.
-Note: confusingly “output” here refers to the raw frames being encoded and “capture” to the encoded H264 output frames. A good way to think about this is to consider how V4L2 was originally designed: frames are sent to output devices like graphics cards and read from capture devices like cameras.
-For 1080p raw frames in YUYV format:
-struct v4l2_format fm; struct v4l2_pix_format_mplane *mp = &amp;fm.fmt.pix_mp; fm.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; ioctl(fd, VIDIOC_G_FMT, &amp;fm); mp-&gt;width = 1920; mp-&gt;height = 1080; mp-&gt;pixelformat = V4L2_PIX_FMT_YUYV; ioctl(fd, VIDIOC_S_FMT, &amp;fm); fm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE; ioctl(fd, VIDIOC_G_FMT, &amp;fm); mp-&gt;width = 1920; mp-&gt;height = 1080; ioctl(fd, VIDIOC_S_FMT, &amp;fm); Now, we set the inter-frame interval to indirectly set the frame rate. For a 30FPS video:
-struct v4l2_streamparm stream; memset(&amp;stream, 0, sizeof(stream)); stream.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; stream.parm.output.timeperframe.numerator = 1; stream.parm.output.timeperframe.denominator = 30; ioctl(fd, VIDIOC_S_PARM, &amp;stream); The most complex part of the setup is configuring the mmap buffers to send and receive frames. Since we’re not trying to be performant, we use one capture buffer and one output buffer.
-struct buffer { void* start; int length; struct v4l2_buffer inner; struct v4l2_plane plane; }; // mmaps the buffers for the given type of device (capture or output). void map(int fd, uint32_t type, struct buffer* buffer) { struct v4l2_buffer *inner = &amp;buffer-&gt;inner; memset(inner, 0, sizeof(*inner)); inner-&gt;type = type; inner-&gt;memory = V4L2_MEMORY_MMAP; inner-&gt;index = 0; inner-&gt;length = 1; inner-&gt;m.planes = &amp;buffer-&gt;plane; ioctl(fd, VIDIOC_QUERYBUF, inner); buffer-&gt;length = inner-&gt;m.planes[0].length; buffer-&gt;start = mmap(NULL, buffer-&gt;length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, inner-&gt;m.planes[0].m.mem_offset); } struct v4l2_requestbuffers buf; buf.memory = V4L2_MEMORY_MMAP; buf.count = 1; struct buffer output; buf.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; ioctl(fd, VIDIOC_REQBUFS, &amp;buf); map(fd, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, &amp;output); struct buffer capture; buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE; ioctl(fd, VIDIOC_REQBUFS, &amp;buf); map(fd, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, &amp;capture); Next, we “queue” up the capture and output buffers. This tells the encoder that it has exclusive access to these buffers until we dequeue them.
-ioctl(fd, VIDIOC_QBUF, &amp;capture-&gt;inner); ioctl(fd, VIDIOC_QBUF, &amp;output-&gt;inner); Finally, we start the streaming process; this tells the kernel that it should start reading raw frames from the output buffer and writing encoded frames to the capture buffer:
-int type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; ioctl(fd, VIDIOC_STREAMON, &amp;type); type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE; ioctl(fd, VIDIOC_STREAMON, &amp;type);">
-  <meta itemprop="datePublished" content="2021-02-01T23:00:00+00:00">
-  <meta itemprop="dateModified" content="2021-02-01T23:00:00+00:00">
-  <meta itemprop="wordCount" content="1552"><meta property="og:url" content="/hw-encoding-raspi/">
-  <meta property="og:site_name" content="Lalit Maganti">
-  <meta property="og:title" content="V4L2 and Hardware Encoding on the Raspberry Pi">
-  <meta property="og:description" content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
-Background
-My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses ustreamer to read frames from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the MJPEG output, support was recently added for encoding video using H264.
-Even after messing with the source code, I could not get the H264 encoding working on my Pi running 64-bit Ubuntu with an error message of Can&#39;t create MMAL wrapper. Digging further, I ran into some insurmountable roadblocks with the approach taken by ustreamer and discovered the complex state of hardware encoding on the Pi.
-In short, there are three userspace APIs for accessing the HW encoding and decoding on the Pi’s Broadcom chip:
-OpenMAX Integration Layer (OpenMAX IL) This API came directly from Broadcom and was the original way to access hardware codecs. Support was dropped by Broadcom a long time ago and there appears to be no hope of it ever working on 64-bit OSes. ustreamer uses this API to perform MJPEG encoding when specifically requested by the user. Multimedia Abstraction Layer (MMAL) This API was developed by the Pi developers as a replacement for OpenMAX and backs tools like raspistill and raspivid. While support for 64-bit was added at one point, it was subsequently reverted and, currently, does not work. ustreamer uses this API to perform H264 encoding to shared memory. Video4Linux2 Memory to Memory (V4L2 M2M) V4L2 is Linux API which was historically used for video capture and output. In 2010, the M2M API was added, significantly extending V4L2 and adding support for video codecs. The Raspberry Pi kernel has a driver which uses MMAL APIs in kernelspace and integrates with the rest of V4L2. Since this is just a generic kernel API, it works out of the box on 64-bit OSes with programs including ffmpeg using it. Since digging into the internals of MMAL seemed complex, even to knowledgable folks in the Pi community, I decided to try to moving ustreamer’s H264 encoding to use V4L2 instead. As a side benefit, since we’re using Linux kernel APIs, this should also futureproof this code to any new revisions of the Pi.
-I quickly ran into the fact that, while lots of people have used V42L for cameras and webcams, only the big projects like GStreamer and ffmpeg use it for encoding. This meant there was no simple guide or example I could follow. However, with a lot of poring over kernel documentation and trial and error, I learnt enough to successfully perform H264 hardware encoding using V4L2 and modified ustreamer to support it.
-Using V4L2: step by step
-Generally, V4L2 works in either “capture” (frames being read off a device e.g. camera or webcam) or “output” (frames being sent to a device e.g. a graphics card) M2M combines “capture” and “output” into a single mode which allows arbitrary transformations of frames. Video encoding is the obvious example of this but decoding is also supported.
-All communication with the hardware encoder on the Pi is done by opening a special device in /dev (/dev/video11 to be precise), performing ioctls on the file descriptor to control the encoding and using mmap-ed memory to pass the frames between userspace and kernelspace.
-There are two phases to the encoding process: setup and streaming. In the setup phase, we tell the encoder about things like the pixel format, resolution, frame rate and setup the buffers to pass the frames. The streaming phase involves writing the next raw frame of data to the kernel and reading back the encoded frame.
-Note: all error handling is omitted to make the code snippets smaller.
-Setup
-First, we open the special device for the video encoder. This gives an fd we can use for ioctls.
-#include &lt;linux/videodev2.h&gt; int fd = open(&#34;/dev/video11&#34;, O_RDWR); Next, we setup the “output” and “capture” devices; the most important things to set are resolution and pixel format. The “capture” device will be implicitly set to produce H264 frames with the same pixel format as the output but the resolution needs to be set manually.
-Note: confusingly “output” here refers to the raw frames being encoded and “capture” to the encoded H264 output frames. A good way to think about this is to consider how V4L2 was originally designed: frames are sent to output devices like graphics cards and read from capture devices like cameras.
-For 1080p raw frames in YUYV format:
-struct v4l2_format fm; struct v4l2_pix_format_mplane *mp = &amp;fm.fmt.pix_mp; fm.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; ioctl(fd, VIDIOC_G_FMT, &amp;fm); mp-&gt;width = 1920; mp-&gt;height = 1080; mp-&gt;pixelformat = V4L2_PIX_FMT_YUYV; ioctl(fd, VIDIOC_S_FMT, &amp;fm); fm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE; ioctl(fd, VIDIOC_G_FMT, &amp;fm); mp-&gt;width = 1920; mp-&gt;height = 1080; ioctl(fd, VIDIOC_S_FMT, &amp;fm); Now, we set the inter-frame interval to indirectly set the frame rate. For a 30FPS video:
-struct v4l2_streamparm stream; memset(&amp;stream, 0, sizeof(stream)); stream.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; stream.parm.output.timeperframe.numerator = 1; stream.parm.output.timeperframe.denominator = 30; ioctl(fd, VIDIOC_S_PARM, &amp;stream); The most complex part of the setup is configuring the mmap buffers to send and receive frames. Since we’re not trying to be performant, we use one capture buffer and one output buffer.
-struct buffer { void* start; int length; struct v4l2_buffer inner; struct v4l2_plane plane; }; // mmaps the buffers for the given type of device (capture or output). void map(int fd, uint32_t type, struct buffer* buffer) { struct v4l2_buffer *inner = &amp;buffer-&gt;inner; memset(inner, 0, sizeof(*inner)); inner-&gt;type = type; inner-&gt;memory = V4L2_MEMORY_MMAP; inner-&gt;index = 0; inner-&gt;length = 1; inner-&gt;m.planes = &amp;buffer-&gt;plane; ioctl(fd, VIDIOC_QUERYBUF, inner); buffer-&gt;length = inner-&gt;m.planes[0].length; buffer-&gt;start = mmap(NULL, buffer-&gt;length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, inner-&gt;m.planes[0].m.mem_offset); } struct v4l2_requestbuffers buf; buf.memory = V4L2_MEMORY_MMAP; buf.count = 1; struct buffer output; buf.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; ioctl(fd, VIDIOC_REQBUFS, &amp;buf); map(fd, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, &amp;output); struct buffer capture; buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE; ioctl(fd, VIDIOC_REQBUFS, &amp;buf); map(fd, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, &amp;capture); Next, we “queue” up the capture and output buffers. This tells the encoder that it has exclusive access to these buffers until we dequeue them.
-ioctl(fd, VIDIOC_QBUF, &amp;capture-&gt;inner); ioctl(fd, VIDIOC_QBUF, &amp;output-&gt;inner); Finally, we start the streaming process; this tells the kernel that it should start reading raw frames from the output buffer and writing encoded frames to the capture buffer:
-int type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; ioctl(fd, VIDIOC_STREAMON, &amp;type); type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE; ioctl(fd, VIDIOC_STREAMON, &amp;type);">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2021-02-01T23:00:00+00:00">
-    <meta property="article:modified_time" content="2021-02-01T23:00:00+00:00">
-
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="V4L2 and Hardware Encoding on the Raspberry Pi">
-  <meta name="twitter:description" content="TLDR: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding and encoding on Linux.
-Background
-My journey started at this video on the excellent Craft Computing YouTube channel which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses ustreamer to read frames from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the MJPEG output, support was recently added for encoding video using H264.
-Even after messing with the source code, I could not get the H264 encoding working on my Pi running 64-bit Ubuntu with an error message of Can&#39;t create MMAL wrapper. Digging further, I ran into some insurmountable roadblocks with the approach taken by ustreamer and discovered the complex state of hardware encoding on the Pi.
-In short, there are three userspace APIs for accessing the HW encoding and decoding on the Pi’s Broadcom chip:
-OpenMAX Integration Layer (OpenMAX IL) This API came directly from Broadcom and was the original way to access hardware codecs. Support was dropped by Broadcom a long time ago and there appears to be no hope of it ever working on 64-bit OSes. ustreamer uses this API to perform MJPEG encoding when specifically requested by the user. Multimedia Abstraction Layer (MMAL) This API was developed by the Pi developers as a replacement for OpenMAX and backs tools like raspistill and raspivid. While support for 64-bit was added at one point, it was subsequently reverted and, currently, does not work. ustreamer uses this API to perform H264 encoding to shared memory. Video4Linux2 Memory to Memory (V4L2 M2M) V4L2 is Linux API which was historically used for video capture and output. In 2010, the M2M API was added, significantly extending V4L2 and adding support for video codecs. The Raspberry Pi kernel has a driver which uses MMAL APIs in kernelspace and integrates with the rest of V4L2. Since this is just a generic kernel API, it works out of the box on 64-bit OSes with programs including ffmpeg using it. Since digging into the internals of MMAL seemed complex, even to knowledgable folks in the Pi community, I decided to try to moving ustreamer’s H264 encoding to use V4L2 instead. As a side benefit, since we’re using Linux kernel APIs, this should also futureproof this code to any new revisions of the Pi.
-I quickly ran into the fact that, while lots of people have used V42L for cameras and webcams, only the big projects like GStreamer and ffmpeg use it for encoding. This meant there was no simple guide or example I could follow. However, with a lot of poring over kernel documentation and trial and error, I learnt enough to successfully perform H264 hardware encoding using V4L2 and modified ustreamer to support it.
-Using V4L2: step by step
-Generally, V4L2 works in either “capture” (frames being read off a device e.g. camera or webcam) or “output” (frames being sent to a device e.g. a graphics card) M2M combines “capture” and “output” into a single mode which allows arbitrary transformations of frames. Video encoding is the obvious example of this but decoding is also supported.
-All communication with the hardware encoder on the Pi is done by opening a special device in /dev (/dev/video11 to be precise), performing ioctls on the file descriptor to control the encoding and using mmap-ed memory to pass the frames between userspace and kernelspace.
-There are two phases to the encoding process: setup and streaming. In the setup phase, we tell the encoder about things like the pixel format, resolution, frame rate and setup the buffers to pass the frames. The streaming phase involves writing the next raw frame of data to the kernel and reading back the encoded frame.
-Note: all error handling is omitted to make the code snippets smaller.
-Setup
-First, we open the special device for the video encoder. This gives an fd we can use for ioctls.
-#include &lt;linux/videodev2.h&gt; int fd = open(&#34;/dev/video11&#34;, O_RDWR); Next, we setup the “output” and “capture” devices; the most important things to set are resolution and pixel format. The “capture” device will be implicitly set to produce H264 frames with the same pixel format as the output but the resolution needs to be set manually.
-Note: confusingly “output” here refers to the raw frames being encoded and “capture” to the encoded H264 output frames. A good way to think about this is to consider how V4L2 was originally designed: frames are sent to output devices like graphics cards and read from capture devices like cameras.
-For 1080p raw frames in YUYV format:
-struct v4l2_format fm; struct v4l2_pix_format_mplane *mp = &amp;fm.fmt.pix_mp; fm.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; ioctl(fd, VIDIOC_G_FMT, &amp;fm); mp-&gt;width = 1920; mp-&gt;height = 1080; mp-&gt;pixelformat = V4L2_PIX_FMT_YUYV; ioctl(fd, VIDIOC_S_FMT, &amp;fm); fm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE; ioctl(fd, VIDIOC_G_FMT, &amp;fm); mp-&gt;width = 1920; mp-&gt;height = 1080; ioctl(fd, VIDIOC_S_FMT, &amp;fm); Now, we set the inter-frame interval to indirectly set the frame rate. For a 30FPS video:
-struct v4l2_streamparm stream; memset(&amp;stream, 0, sizeof(stream)); stream.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; stream.parm.output.timeperframe.numerator = 1; stream.parm.output.timeperframe.denominator = 30; ioctl(fd, VIDIOC_S_PARM, &amp;stream); The most complex part of the setup is configuring the mmap buffers to send and receive frames. Since we’re not trying to be performant, we use one capture buffer and one output buffer.
-struct buffer { void* start; int length; struct v4l2_buffer inner; struct v4l2_plane plane; }; // mmaps the buffers for the given type of device (capture or output). void map(int fd, uint32_t type, struct buffer* buffer) { struct v4l2_buffer *inner = &amp;buffer-&gt;inner; memset(inner, 0, sizeof(*inner)); inner-&gt;type = type; inner-&gt;memory = V4L2_MEMORY_MMAP; inner-&gt;index = 0; inner-&gt;length = 1; inner-&gt;m.planes = &amp;buffer-&gt;plane; ioctl(fd, VIDIOC_QUERYBUF, inner); buffer-&gt;length = inner-&gt;m.planes[0].length; buffer-&gt;start = mmap(NULL, buffer-&gt;length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, inner-&gt;m.planes[0].m.mem_offset); } struct v4l2_requestbuffers buf; buf.memory = V4L2_MEMORY_MMAP; buf.count = 1; struct buffer output; buf.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; ioctl(fd, VIDIOC_REQBUFS, &amp;buf); map(fd, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, &amp;output); struct buffer capture; buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE; ioctl(fd, VIDIOC_REQBUFS, &amp;buf); map(fd, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, &amp;capture); Next, we “queue” up the capture and output buffers. This tells the encoder that it has exclusive access to these buffers until we dequeue them.
-ioctl(fd, VIDIOC_QBUF, &amp;capture-&gt;inner); ioctl(fd, VIDIOC_QBUF, &amp;output-&gt;inner); Finally, we start the streaming process; this tells the kernel that it should start reading raw frames from the output buffer and writing encoded frames to the capture buffer:
-int type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE; ioctl(fd, VIDIOC_STREAMON, &amp;type); type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE; ioctl(fd, VIDIOC_STREAMON, &amp;type);">
-
-  <link rel="canonical" href="/hw-encoding-raspi/" />
-</head>
-<body
-    class="bg-(--bg) text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white"
-  ><header
-  class="mx-auto flex h-[4.5rem] max-w-(--w) px-8 whitespace-nowrap lg:justify-center"
->
-  <div class="relative z-50 flex items-center ltr:mr-auto rtl:ml-auto">
-    <a
-      class="-translate-y-[1px] text-2xl font-medium"
-      href="/"
-      >Lalit Maganti</a
-    >
-    <div
-      class="btn-dark text-[0px] ltr:ml-4 rtl:mr-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.png)_left_center/_auto_theme('spacing.6')_no-repeat] [transition:_background-position_0.4s_steps(5)] dark:[background-position:right]"
-      role="button"
-      aria-label="Dark"
-    ></div>
-  </div>
-
-  <div
-    class="btn-menu relative z-50 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden ltr:-mr-8 rtl:-ml-8"
-    role="button"
-    aria-label="Menu"
-  ></div>
-
-  <script>
-    
-    const htmlClass = document.documentElement.classList;
-    setTimeout(() => {
-      htmlClass.remove('not-ready');
-    }, 10);
-
-    
-    const btnMenu = document.querySelector('.btn-menu');
-    btnMenu.addEventListener('click', () => {
-      htmlClass.toggle('open');
-    });
-
-    
-    const metaTheme = document.querySelector('meta[name="theme-color"]');
-    const lightBg = '#faf8f1'.replace(/"/g, '');
-    const setDark = (isDark) => {
-      metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
-      htmlClass[isDark ? 'add' : 'remove']('dark');
-      localStorage.setItem('dark', isDark);
-    };
-
-    
-    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    if (htmlClass.contains('dark')) {
-      setDark(true);
-    } else {
-      const darkVal = localStorage.getItem('dark');
-      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
-    }
-
-    
-    darkScheme.addEventListener('change', (event) => {
-      setDark(event.matches);
-    });
-
-    
-    const btnDark = document.querySelector('.btn-dark');
-    btnDark.addEventListener('click', () => {
-      setDark(localStorage.getItem('dark') !== 'true');
-    });
-  </script>
-
-  <div
-    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-(--bg) pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none"
-  ><nav
-      class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-10 rtl:space-x-reverse"
-    ><a
-        class="block text-center text-xl leading-[5rem] lg:text-base lg:font-normal"
-        href="/page/about/"
-        >About</a
-      ></nav><nav
-      class="mt-12 flex justify-center space-x-10 lg:mt-0 lg:items-center ltr:lg:ml-14 rtl:space-x-reverse rtl:lg:mr-14 dark:invert"
-    >
-      <a
-        class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
-        style="--url: url(./github.svg)"
-        href="https://github.com/LalitMaganti"
-        target="_blank"
-        rel="me"
-      >github</a>
-      <a
-        class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
-        style="--url: url(./linkedin.svg)"
-        href="https://linkedin.com/in/lalit-maganti-18b73a9a"
-        target="_blank"
-        rel="me"
-      >linkedin</a>
-      <a
-        class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
-        style="--url: url(./rss.svg)"
-        href="/index.xml"
-        target="_blank"
-        rel="alternate"
-      >rss</a>
-    </nav>
-  </div>
-</header>
-<main
-      class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-0 pb-16"
-      style="margin-top: 0;"
-    ><article>
-  <header class="mb-4">
-    <h1 class="!mt-0 !mb-1 !text-base !font-bold">V4L2 and Hardware Encoding on the Raspberry Pi</h1><time class="block text-xs" style="margin-bottom: 0.5rem; opacity: 0.4;">Feb 1, 2021</time></header>
-
-  <section><p><strong>TLDR</strong>: Explain how the V4L2 M2M API works through the use-case of implementing hardware video encoding on
-the Raspberry Pi. This knowledge is generally useful as V4L2 is the de-facto generic API for hardware decoding
-and encoding on Linux.</p>
-<p><strong>Background</strong></p>
-<p>My journey started at <a href="https://www.youtube.com/watch?v=CyEpshm16HY&amp;t=139s">this video</a>
-on the excellent <a href="https://www.youtube.com/channel/UCp3yVOm6A55nx65STpm3tXQ">Craft Computing</a> YouTube channel
-which showed how to setup TinyPilot, a Python app for KVM over IP which runs on a Raspberry Pi.
-Behind the scenes, TinyPilot uses <a href="https://github.com/pikvm/ustreamer">ustreamer</a> to read frames
-from a HDMI capture card and either exposes it over HTTP or writes it to shared memory. Along with the
-MJPEG output, support was recently added for encoding video using H264.</p>
-<p>Even after messing with the source code, I could not get the H264 encoding working on my Pi running
-64-bit Ubuntu with an error message of <code>Can't create MMAL wrapper</code>. Digging further, I ran into some
-insurmountable roadblocks with the approach taken by ustreamer and discovered the complex state of
-hardware encoding on the Pi.</p>
-<p>In short, there are three userspace APIs for accessing the HW encoding and decoding on the
-Pi&rsquo;s Broadcom chip:</p>
-<ol>
-<li><strong>OpenMAX Integration Layer (OpenMAX IL)</strong></li>
-</ol>
-<ul>
-<li>This API came directly from Broadcom and was the original way to access hardware codecs.</li>
-<li>Support was dropped by Broadcom a long time ago and there appears to be
-<a href="https://github.com/raspberrypi/Raspberry-Pi-OS-64bit/issues/98#issuecomment-715321951">no hope of it</a>
-ever working on 64-bit OSes.</li>
-<li>ustreamer <a href="https://github.com/pikvm/ustreamer/blob/master/src/ustreamer/encoders/omx/encoder.c">uses this API</a>
-to perform MJPEG encoding when specifically requested by the user.</li>
-</ul>
-<ol start="2">
-<li><strong>Multimedia Abstraction Layer (MMAL)</strong></li>
-</ol>
-<ul>
-<li>This API was developed by the Pi developers as a replacement for OpenMAX and backs tools like
-<code>raspistill</code> and <code>raspivid</code>.</li>
-<li>While support for 64-bit was added
-<a href="https://github.com/raspberrypi/userland/commit/7d3c6b9f4c3ddeecefdeb2b882bada74a235249b">at one point</a>,
-it was subsequently
-<a href="https://github.com/raspberrypi/userland/commit/f97b1af1b3e653f9da2c1a3643479bfd469e3b74">reverted</a> and,
-currently, does not work.</li>
-<li>ustreamer uses <a href="https://github.com/pikvm/ustreamer/blob/master/src/ustreamer/h264/encoder.c">this API</a>
-to perform H264 encoding to shared memory.</li>
-</ul>
-<ol start="3">
-<li><strong>Video4Linux2 Memory to Memory (V4L2 M2M)</strong></li>
-</ol>
-<ul>
-<li>V4L2 is Linux API which was historically used for video capture and output. In 2010, the M2M API
-was added, significantly extending V4L2 and adding support for video codecs.</li>
-<li>The Raspberry Pi kernel <a href="https://github.com/raspberrypi/linux/blob/rpi-5.11.y/drivers/staging/vc04_services/bcm2835-codec/bcm2835-v4l2-codec.c">has a driver</a>
-which uses MMAL APIs in kernelspace and integrates with the rest of V4L2.</li>
-<li>Since this is just a generic kernel API, it works out of the box on 64-bit OSes with programs
-including ffmpeg using it.</li>
-</ul>
-<p>Since digging into the internals of MMAL seemed complex, even to knowledgable folks in the Pi community,
-I decided to try to moving ustreamer&rsquo;s H264 encoding to use V4L2 instead. As a side benefit, since we&rsquo;re
-using Linux kernel APIs, this should also futureproof this code to any new revisions of the Pi.</p>
-<p>I quickly ran into the fact that, while lots of people have used V42L for cameras and webcams,
-only the big projects like GStreamer and ffmpeg use it for encoding. This meant there was no simple guide
-or example I could follow. However, with a lot of poring over kernel documentation and
-trial and error, I learnt enough to successfully perform H264 hardware encoding using V4L2 and
-<a href="https://github.com/LalitMaganti/ustreamer/commit/a14822a03da74c429928060d99a06e7a0a39d030">modified ustreamer</a>
-to support it.</p>
-<p><strong>Using V4L2: step by step</strong></p>
-<p>Generally, V4L2 works in either &ldquo;capture&rdquo; (frames being read off a device e.g. camera or webcam) or
-&ldquo;output&rdquo; (frames being sent to a device e.g. a graphics card) M2M combines &ldquo;capture&rdquo; and
-&ldquo;output&rdquo; into a single mode which allows arbitrary transformations of frames. Video encoding is the
-obvious example of this but decoding is also supported.</p>
-<p><img src="/img/hw-encoding-raspi/v4l2.png" alt="Diagram for V4L2 APIs"></p>
-<p>All communication with the hardware encoder on the Pi is done by opening a special device in
-<code>/dev</code> (<code>/dev/video11</code> to be precise), performing <code>ioctls</code> on the file descriptor to control the
-encoding and using mmap-ed memory to pass the frames between userspace and kernelspace.</p>
-<p>There are two phases to the encoding process: setup and streaming. In the setup phase, we tell the encoder
-about things like the pixel format, resolution, frame rate and setup the buffers to pass the frames.
-The streaming phase involves writing the next raw frame of data to the kernel and reading back the
-encoded frame.</p>
-<p><em>Note: all error handling is omitted to make the code snippets smaller.</em></p>
-<p><strong>Setup</strong></p>
-<p>First, we open the special device for the video encoder. This gives an fd we can use for <code>ioctls</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;linux/videodev2.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> fd <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#34;/dev/video11&#34;</span>, O_RDWR);
-</span></span></code></pre></div><p>Next, we setup the &ldquo;output&rdquo; and &ldquo;capture&rdquo; devices; the most important things to set are resolution
-and pixel format. The &ldquo;capture&rdquo; device will be implicitly set to produce H264 frames with the same
-pixel format as the output but the resolution needs to be set manually.</p>
-<p><em>Note: confusingly &ldquo;output&rdquo; here refers to the raw frames being encoded and &ldquo;capture&rdquo; to the encoded H264
-output frames. A good way to think about this is to consider how V4L2 was originally designed:
-frames are sent to output devices like graphics cards and read from capture devices like cameras.</em></p>
-<p>For 1080p raw frames in <a href="">YUYV format</a>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_format</span> fm;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_pix_format_mplane</span> <span style="color:#f92672">*</span>mp <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>fm.fmt.pix_mp;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>fm.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_G_FMT, <span style="color:#f92672">&amp;</span>fm);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1920</span>;
-</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>height <span style="color:#f92672">=</span> <span style="color:#ae81ff">1080</span>;
-</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>pixelformat <span style="color:#f92672">=</span> V4L2_PIX_FMT_YUYV;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_S_FMT, <span style="color:#f92672">&amp;</span>fm);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>fm.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_G_FMT, <span style="color:#f92672">&amp;</span>fm);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1920</span>;
-</span></span><span style="display:flex;"><span>mp<span style="color:#f92672">-&gt;</span>height <span style="color:#f92672">=</span> <span style="color:#ae81ff">1080</span>;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_S_FMT, <span style="color:#f92672">&amp;</span>fm);
-</span></span></code></pre></div><p>Now, we set the inter-frame interval to indirectly set the frame rate. For a 30FPS video:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_streamparm</span> stream;
-</span></span><span style="display:flex;"><span>memset(<span style="color:#f92672">&amp;</span>stream, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(stream));
-</span></span><span style="display:flex;"><span>stream.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-</span></span><span style="display:flex;"><span>stream.parm.output.timeperframe.numerator <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-</span></span><span style="display:flex;"><span>stream.parm.output.timeperframe.denominator <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_S_PARM, <span style="color:#f92672">&amp;</span>stream);
-</span></span></code></pre></div><p>The most complex part of the setup is configuring the mmap buffers to send and receive frames.
-Since we&rsquo;re not trying to be performant, we use one capture buffer and one output buffer.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> start;
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> length;
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_buffer</span> inner;
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_plane</span> plane;
-</span></span><span style="display:flex;"><span>};
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// mmaps the buffers for the given type of device (capture or output).
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">int</span> fd, <span style="color:#66d9ef">uint32_t</span> type, <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span><span style="color:#f92672">*</span> buffer) {
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_buffer</span> <span style="color:#f92672">*</span>inner <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>buffer<span style="color:#f92672">-&gt;</span>inner;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  memset(inner, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(<span style="color:#f92672">*</span>inner));
-</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>type <span style="color:#f92672">=</span> type;
-</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>memory <span style="color:#f92672">=</span> V4L2_MEMORY_MMAP;
-</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>index <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>length <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-</span></span><span style="display:flex;"><span>  inner<span style="color:#f92672">-&gt;</span>m.planes <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>buffer<span style="color:#f92672">-&gt;</span>plane;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  ioctl(fd, VIDIOC_QUERYBUF, inner);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  buffer<span style="color:#f92672">-&gt;</span>length <span style="color:#f92672">=</span> inner<span style="color:#f92672">-&gt;</span>m.planes[<span style="color:#ae81ff">0</span>].length;
-</span></span><span style="display:flex;"><span>  buffer<span style="color:#f92672">-&gt;</span>start <span style="color:#f92672">=</span> mmap(NULL, buffer<span style="color:#f92672">-&gt;</span>length, PROT_READ <span style="color:#f92672">|</span> PROT_WRITE,
-</span></span><span style="display:flex;"><span>      MAP_SHARED, fd, inner<span style="color:#f92672">-&gt;</span>m.planes[<span style="color:#ae81ff">0</span>].m.mem_offset);
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_requestbuffers</span> buf;
-</span></span><span style="display:flex;"><span>buf.memory <span style="color:#f92672">=</span> V4L2_MEMORY_MMAP;
-</span></span><span style="display:flex;"><span>buf.count <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> output;
-</span></span><span style="display:flex;"><span>buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_REQBUFS, <span style="color:#f92672">&amp;</span>buf);
-</span></span><span style="display:flex;"><span>map(fd, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, <span style="color:#f92672">&amp;</span>output);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">buffer</span> capture;
-</span></span><span style="display:flex;"><span>buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_REQBUFS, <span style="color:#f92672">&amp;</span>buf);
-</span></span><span style="display:flex;"><span>map(fd, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, <span style="color:#f92672">&amp;</span>capture);
-</span></span></code></pre></div><p>Next, we &ldquo;queue&rdquo; up the capture and output buffers. This tells the encoder that it has exclusive
-access to these buffers until we dequeue them.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>capture<span style="color:#f92672">-&gt;</span>inner);
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>output<span style="color:#f92672">-&gt;</span>inner);
-</span></span></code></pre></div><p>Finally, we start the streaming process; this tells the kernel that it should start
-reading raw frames from the output buffer and writing encoded frames to the capture buffer:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_STREAMON, <span style="color:#f92672">&amp;</span>type);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-</span></span><span style="display:flex;"><span>ioctl(fd, VIDIOC_STREAMON, <span style="color:#f92672">&amp;</span>type);
-</span></span></code></pre></div><p><strong>Streaming</strong></p>
-<p>The actual encoding process is a straightforward loop where we:</p>
-<ul>
-<li>dequeue an output frame, write the next frame and queue it again.</li>
-<li>dequeue a capture frame, read the encoded frame and queue it again.</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">// Assumed functions for reading a raw frame and writing an encoded frame.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// Depending on application this can be from a file, a device or anywhere else.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">read_raw</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> buf, size_t len);
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">write_encoded</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> buf, size_t len);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> bytes;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">do</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_buffer</span> buf;
-</span></span><span style="display:flex;"><span>  buf.memory <span style="color:#f92672">=</span> V4L2_MEMORY_MMAP;
-</span></span><span style="display:flex;"><span>  buf.length <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">v4l2_plane</span> out_planes;
-</span></span><span style="display:flex;"><span>  memset(<span style="color:#f92672">&amp;</span>out_planes, <span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">sizeof</span>(out_planes));
-</span></span><span style="display:flex;"><span>  buf.m.planes <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>out_planes;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Dequeue the output buffer, read the next frame and queue it back.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-</span></span><span style="display:flex;"><span>  ioctl(fd, VIDIOC_DQBUF, <span style="color:#f92672">&amp;</span>buf);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  bytes <span style="color:#f92672">=</span> read_raw(output<span style="color:#f92672">-&gt;</span>start, output<span style="color:#f92672">-&gt;</span>length);
-</span></span><span style="display:flex;"><span>  output<span style="color:#f92672">-&gt;</span>plane.bytesused <span style="color:#f92672">=</span> bytes;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>output<span style="color:#f92672">-&gt;</span>inner);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Dequeue the capture buffer, write out the encoded frame and queue it back.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  buf.type <span style="color:#f92672">=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-</span></span><span style="display:flex;"><span>  ioctl(fd, VIDIOC_DQBUF, <span style="color:#f92672">&amp;</span>buf);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> encoded_len <span style="color:#f92672">=</span> buf.m.planes[<span style="color:#ae81ff">0</span>].bytesused;
-</span></span><span style="display:flex;"><span>  write_encoded(capture<span style="color:#f92672">-&gt;</span>start, encoded_len);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  ioctl(fd, VIDIOC_QBUF, <span style="color:#f92672">&amp;</span>capture<span style="color:#f92672">-&gt;</span>inner);
-</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">while</span> (bytes <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>);
-</span></span></code></pre></div><p><strong>What I learned</strong></p>
-<p>There are several useful things I learned while working on this project:</p>
-<ul>
-<li>The kernel documentation had some excellent high-level explanations about how the API worked
-<ul>
-<li>Specifically <a href="https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-encoder.html">this docs page</a>
-was an exceptional resource as it lays out all the steps needed to perform encoding</li>
-<li>Unfortunately, it only rarely provides code samples so a lot of trial and error was still needed.</li>
-</ul>
-</li>
-<li>The <a href="https://github.com/raspberrypi/linux/blob/rpi-5.11.y/drivers/staging/vc04_services/bcm2835-codec/bcm2835-v4l2-codec.c">kernel source</a> was invaluable to figure out why error codes were being returned.
-<ul>
-<li>An <code>ENOSYS</code> error code is not helpful when it is implementation specific&hellip;</li>
-</ul>
-</li>
-<li>I discovered quite late in the project that loading the <code>bcm2835_codec</code> kernel module with debugging turned on
-(by setting the parameter <code>debug=3</code>) allowed visibility into log messages which I could cross reference
-with the kernel sources.
-<ul>
-<li>This would have saved a bunch of time if I&rsquo;d known this at the start</li>
-</ul>
-</li>
-<li>Looking at <code>strace</code> of ffmpeg trying to encode the same video as my program allowed me to see if there was
-any hidden or different syscalls.
-<ul>
-<li>Instead of an explicit error being returned, I would sometimes end up being unable to dequeue a capture or
-output frame, hanging ustreamer.</li>
-<li>This included several times when I had missed a required field in a setup ioctl and when I had
-messed up the order of the queue/dequeue loop.</li>
-</ul>
-</li>
-</ul>
-<p><strong>Conclusion</strong></p>
-<p>Hopefully, this article has showed how to approach doing video encoding on the Raspberry Pi from
-first principles. I&rsquo;ve also tried to give an overview of the V4L2 API; the beauty of a standard
-API means much of what I&rsquo;ve said here is not specific to the Pi but could be reused on any number
-of situations.</p>
-<p>There is a lot more interesting ground I could have covered including non-blocking streaming, DMA and
-draining the encoder but this post has already run long enough&hellip;</p></section>
-
-  <nav
-    class="mt-24 flex overflow-hidden rounded-xl bg-black/[3%] text-lg leading-[1.2]! *:flex *:w-1/2 *:items-center *:p-5 *:font-medium *:no-underline dark:bg-white/[8%] [&>*:hover]:bg-black/[2%] dark:[&>*:hover]:bg-white/[3%]"
-  ><a class="ltr:pr-3 rtl:pl-3" href="/llm-motivation-via-emotions/"
-      ><span class="ltr:mr-1.5 rtl:ml-1.5">←</span><span>Harnessing Frustration: Using LLMs to Overcome Activation Energy</span></a
-    ></nav></article></main><footer
-  class="mx-auto flex h-[4.5rem] max-w-(--w) items-center px-8 text-xs tracking-wider uppercase opacity-60"
->
-  <div class="mr-auto">&copy;2025
-    <a class="link" href="/">Lalit Maganti</a></div>
-  <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
-    >powered by hugo️️</a
-  >️
-  <a
-    class="link"
-    href="https://github.com/nanxiaobei/hugo-paper"
-    rel="noopener"
-    target="_blank"
-    >hugo-paper</a
-  >
-</footer>
-</body>
-</html>
+<a href=https://github.com/raspberrypi/userland/commit/f97b1af1b3e653f9da2c1a3643479bfd469e3b74>reverted</a>
+and, currently, does not work.</li><li>ustreamer uses
+<a href=https://github.com/pikvm/ustreamer/blob/master/src/ustreamer/h264/encoder.c>this API</a>
+to perform H264 encoding to shared memory.</li></ul><ol start=3><li><strong>Video4Linux2 Memory to Memory (V4L2 M2M)</strong></li></ol><ul><li>V4L2 is Linux API which was historically used for video capture and output. In
+2010, the M2M API was added, significantly extending V4L2 and adding support
+for video codecs.</li><li>The Raspberry Pi kernel
+<a href=https://github.com/raspberrypi/linux/blob/rpi-5.11.y/drivers/staging/vc04_services/bcm2835-codec/bcm2835-v4l2-codec.c>has a driver</a>
+which uses MMAL APIs in kernelspace and integrates with the rest of V4L2.</li><li>Since this is just a generic kernel API, it works out of the box on 64-bit
+OSes with programs including ffmpeg using it.</li></ul><p>Since digging into the internals of MMAL seemed complex, even to knowledgable
+folks in the Pi community, I decided to try to moving ustreamer&rsquo;s H264 encoding
+to use V4L2 instead. As a side benefit, since we&rsquo;re using Linux kernel APIs,
+this should also futureproof this code to any new revisions of the Pi.</p><p>I quickly ran into the fact that, while lots of people have used V42L for
+cameras and webcams, only the big projects like GStreamer and ffmpeg use it for
+encoding. This meant there was no simple guide or example I could follow.
+However, with a lot of poring over kernel documentation and trial and error, I
+learnt enough to successfully perform H264 hardware encoding using V4L2 and
+<a href=https://github.com/LalitMaganti/ustreamer/commit/a14822a03da74c429928060d99a06e7a0a39d030>modified ustreamer</a>
+to support it.</p><p><strong>Using V4L2: step by step</strong></p><p>Generally, V4L2 works in either &ldquo;capture&rdquo; (frames being read off a device e.g.
+camera or webcam) or &ldquo;output&rdquo; (frames being sent to a device e.g. a graphics
+card) M2M combines &ldquo;capture&rdquo; and &ldquo;output&rdquo; into a single mode which allows
+arbitrary transformations of frames. Video encoding is the obvious example of
+this but decoding is also supported.</p><p><img src=/img/hw-encoding-raspi/v4l2.png alt="Diagram for V4L2 APIs"></p><p>All communication with the hardware encoder on the Pi is done by opening a
+special device in <code>/dev</code> (<code>/dev/video11</code> to be precise), performing <code>ioctls</code> on
+the file descriptor to control the encoding and using mmap-ed memory to pass the
+frames between userspace and kernelspace.</p><p>There are two phases to the encoding process: setup and streaming. In the setup
+phase, we tell the encoder about things like the pixel format, resolution, frame
+rate and setup the buffers to pass the frames. The streaming phase involves
+writing the next raw frame of data to the kernel and reading back the encoded
+frame.</p><p><em>Note: all error handling is omitted to make the code snippets smaller.</em></p><p><strong>Setup</strong></p><p>First, we open the special device for the video encoder. This gives an fd we can
+use for <code>ioctls</code>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#75715e>#include</span> <span style=color:#75715e>&lt;linux/videodev2.h&gt;</span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> fd <span style=color:#f92672>=</span> open(<span style=color:#e6db74>&#34;/dev/video11&#34;</span>, O_RDWR);
+</span></span></code></pre></div><p>Next, we setup the &ldquo;output&rdquo; and &ldquo;capture&rdquo; devices; the most important things to
+set are resolution and pixel format. The &ldquo;capture&rdquo; device will be implicitly set
+to produce H264 frames with the same pixel format as the output but the
+resolution needs to be set manually.</p><p><em>Note: confusingly &ldquo;output&rdquo; here refers to the raw frames being encoded and
+&ldquo;capture&rdquo; to the encoded H264 output frames. A good way to think about this is
+to consider how V4L2 was originally designed: frames are sent to output devices
+like graphics cards and read from capture devices like cameras.</em></p><p>For 1080p raw frames in <a href>YUYV format</a>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>v4l2_format</span> fm;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>v4l2_pix_format_mplane</span> <span style=color:#f92672>*</span>mp <span style=color:#f92672>=</span> <span style=color:#f92672>&amp;</span>fm.fmt.pix_mp;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>fm.type <span style=color:#f92672>=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+</span></span><span style=display:flex><span>ioctl(fd, VIDIOC_G_FMT, <span style=color:#f92672>&amp;</span>fm);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>mp<span style=color:#f92672>-&gt;</span>width <span style=color:#f92672>=</span> <span style=color:#ae81ff>1920</span>;
+</span></span><span style=display:flex><span>mp<span style=color:#f92672>-&gt;</span>height <span style=color:#f92672>=</span> <span style=color:#ae81ff>1080</span>;
+</span></span><span style=display:flex><span>mp<span style=color:#f92672>-&gt;</span>pixelformat <span style=color:#f92672>=</span> V4L2_PIX_FMT_YUYV;
+</span></span><span style=display:flex><span>ioctl(fd, VIDIOC_S_FMT, <span style=color:#f92672>&amp;</span>fm);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>fm.type <span style=color:#f92672>=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+</span></span><span style=display:flex><span>ioctl(fd, VIDIOC_G_FMT, <span style=color:#f92672>&amp;</span>fm);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>mp<span style=color:#f92672>-&gt;</span>width <span style=color:#f92672>=</span> <span style=color:#ae81ff>1920</span>;
+</span></span><span style=display:flex><span>mp<span style=color:#f92672>-&gt;</span>height <span style=color:#f92672>=</span> <span style=color:#ae81ff>1080</span>;
+</span></span><span style=display:flex><span>ioctl(fd, VIDIOC_S_FMT, <span style=color:#f92672>&amp;</span>fm);
+</span></span></code></pre></div><p>Now, we set the inter-frame interval to indirectly set the frame rate. For a
+30FPS video:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>v4l2_streamparm</span> stream;
+</span></span><span style=display:flex><span>memset(<span style=color:#f92672>&amp;</span>stream, <span style=color:#ae81ff>0</span>, <span style=color:#66d9ef>sizeof</span>(stream));
+</span></span><span style=display:flex><span>stream.type <span style=color:#f92672>=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+</span></span><span style=display:flex><span>stream.parm.output.timeperframe.numerator <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+</span></span><span style=display:flex><span>stream.parm.output.timeperframe.denominator <span style=color:#f92672>=</span> <span style=color:#ae81ff>30</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>ioctl(fd, VIDIOC_S_PARM, <span style=color:#f92672>&amp;</span>stream);
+</span></span></code></pre></div><p>The most complex part of the setup is configuring the mmap buffers to send and
+receive frames. Since we&rsquo;re not trying to be performant, we use one capture
+buffer and one output buffer.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>buffer</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>void</span><span style=color:#f92672>*</span> start;
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>int</span> length;
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>v4l2_buffer</span> inner;
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>v4l2_plane</span> plane;
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// mmaps the buffers for the given type of device (capture or output).
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>map</span>(<span style=color:#66d9ef>int</span> fd, <span style=color:#66d9ef>uint32_t</span> type, <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>buffer</span><span style=color:#f92672>*</span> buffer) {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>v4l2_buffer</span> <span style=color:#f92672>*</span>inner <span style=color:#f92672>=</span> <span style=color:#f92672>&amp;</span>buffer<span style=color:#f92672>-&gt;</span>inner;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  memset(inner, <span style=color:#ae81ff>0</span>, <span style=color:#66d9ef>sizeof</span>(<span style=color:#f92672>*</span>inner));
+</span></span><span style=display:flex><span>  inner<span style=color:#f92672>-&gt;</span>type <span style=color:#f92672>=</span> type;
+</span></span><span style=display:flex><span>  inner<span style=color:#f92672>-&gt;</span>memory <span style=color:#f92672>=</span> V4L2_MEMORY_MMAP;
+</span></span><span style=display:flex><span>  inner<span style=color:#f92672>-&gt;</span>index <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>  inner<span style=color:#f92672>-&gt;</span>length <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+</span></span><span style=display:flex><span>  inner<span style=color:#f92672>-&gt;</span>m.planes <span style=color:#f92672>=</span> <span style=color:#f92672>&amp;</span>buffer<span style=color:#f92672>-&gt;</span>plane;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  ioctl(fd, VIDIOC_QUERYBUF, inner);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  buffer<span style=color:#f92672>-&gt;</span>length <span style=color:#f92672>=</span> inner<span style=color:#f92672>-&gt;</span>m.planes[<span style=color:#ae81ff>0</span>].length;
+</span></span><span style=display:flex><span>  buffer<span style=color:#f92672>-&gt;</span>start <span style=color:#f92672>=</span> mmap(NULL, buffer<span style=color:#f92672>-&gt;</span>length, PROT_READ <span style=color:#f92672>|</span> PROT_WRITE,
+</span></span><span style=display:flex><span>      MAP_SHARED, fd, inner<span style=color:#f92672>-&gt;</span>m.planes[<span style=color:#ae81ff>0</span>].m.mem_offset);
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>v4l2_requestbuffers</span> buf;
+</span></span><span style=display:flex><span>buf.memory <span style=color:#f92672>=</span> V4L2_MEMORY_MMAP;
+</span></span><span style=display:flex><span>buf.count <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>buffer</span> output;
+</span></span><span style=display:flex><span>buf.type <span style=color:#f92672>=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+</span></span><span style=display:flex><span>ioctl(fd, VIDIOC_REQBUFS, <span style=color:#f92672>&amp;</span>buf);
+</span></span><span style=display:flex><span>map(fd, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE, <span style=color:#f92672>&amp;</span>output);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>buffer</span> capture;
+</span></span><span style=display:flex><span>buf.type <span style=color:#f92672>=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+</span></span><span style=display:flex><span>ioctl(fd, VIDIOC_REQBUFS, <span style=color:#f92672>&amp;</span>buf);
+</span></span><span style=display:flex><span>map(fd, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, <span style=color:#f92672>&amp;</span>capture);
+</span></span></code></pre></div><p>Next, we &ldquo;queue&rdquo; up the capture and output buffers. This tells the encoder that
+it has exclusive access to these buffers until we dequeue them.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span>ioctl(fd, VIDIOC_QBUF, <span style=color:#f92672>&amp;</span>capture<span style=color:#f92672>-&gt;</span>inner);
+</span></span><span style=display:flex><span>ioctl(fd, VIDIOC_QBUF, <span style=color:#f92672>&amp;</span>output<span style=color:#f92672>-&gt;</span>inner);
+</span></span></code></pre></div><p>Finally, we start the streaming process; this tells the kernel that it should
+start reading raw frames from the output buffer and writing encoded frames to
+the capture buffer:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#66d9ef>int</span> type <span style=color:#f92672>=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+</span></span><span style=display:flex><span>ioctl(fd, VIDIOC_STREAMON, <span style=color:#f92672>&amp;</span>type);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>type <span style=color:#f92672>=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+</span></span><span style=display:flex><span>ioctl(fd, VIDIOC_STREAMON, <span style=color:#f92672>&amp;</span>type);
+</span></span></code></pre></div><p><strong>Streaming</strong></p><p>The actual encoding process is a straightforward loop where we:</p><ul><li>dequeue an output frame, write the next frame and queue it again.</li><li>dequeue a capture frame, read the encoded frame and queue it again.</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#75715e>// Assumed functions for reading a raw frame and writing an encoded frame.
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// Depending on application this can be from a file, a device or anywhere else.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>int</span> <span style=color:#a6e22e>read_raw</span>(<span style=color:#66d9ef>void</span><span style=color:#f92672>*</span> buf, size_t len);
+</span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>write_encoded</span>(<span style=color:#66d9ef>void</span><span style=color:#f92672>*</span> buf, size_t len);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>int</span> bytes;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>do</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>v4l2_buffer</span> buf;
+</span></span><span style=display:flex><span>  buf.memory <span style=color:#f92672>=</span> V4L2_MEMORY_MMAP;
+</span></span><span style=display:flex><span>  buf.length <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>v4l2_plane</span> out_planes;
+</span></span><span style=display:flex><span>  memset(<span style=color:#f92672>&amp;</span>out_planes, <span style=color:#ae81ff>0</span>, <span style=color:#66d9ef>sizeof</span>(out_planes));
+</span></span><span style=display:flex><span>  buf.m.planes <span style=color:#f92672>=</span> <span style=color:#f92672>&amp;</span>out_planes;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// Dequeue the output buffer, read the next frame and queue it back.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  buf.type <span style=color:#f92672>=</span> V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+</span></span><span style=display:flex><span>  ioctl(fd, VIDIOC_DQBUF, <span style=color:#f92672>&amp;</span>buf);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  bytes <span style=color:#f92672>=</span> read_raw(output<span style=color:#f92672>-&gt;</span>start, output<span style=color:#f92672>-&gt;</span>length);
+</span></span><span style=display:flex><span>  output<span style=color:#f92672>-&gt;</span>plane.bytesused <span style=color:#f92672>=</span> bytes;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  ioctl(fd, VIDIOC_QBUF, <span style=color:#f92672>&amp;</span>output<span style=color:#f92672>-&gt;</span>inner);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// Dequeue the capture buffer, write out the encoded frame and queue it back.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  buf.type <span style=color:#f92672>=</span> V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+</span></span><span style=display:flex><span>  ioctl(fd, VIDIOC_DQBUF, <span style=color:#f92672>&amp;</span>buf);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>int</span> encoded_len <span style=color:#f92672>=</span> buf.m.planes[<span style=color:#ae81ff>0</span>].bytesused;
+</span></span><span style=display:flex><span>  write_encoded(capture<span style=color:#f92672>-&gt;</span>start, encoded_len);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  ioctl(fd, VIDIOC_QBUF, <span style=color:#f92672>&amp;</span>capture<span style=color:#f92672>-&gt;</span>inner);
+</span></span><span style=display:flex><span>} <span style=color:#66d9ef>while</span> (bytes <span style=color:#f92672>!=</span> <span style=color:#ae81ff>0</span>);
+</span></span></code></pre></div><p><strong>What I learned</strong></p><p>There are several useful things I learned while working on this project:</p><ul><li>The kernel documentation had some excellent high-level explanations about how
+the API worked<ul><li>Specifically
+<a href=https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dev-encoder.html>this docs page</a>
+was an exceptional resource as it lays out all the steps needed to perform
+encoding</li><li>Unfortunately, it only rarely provides code samples so a lot of trial and
+error was still needed.</li></ul></li><li>The
+<a href=https://github.com/raspberrypi/linux/blob/rpi-5.11.y/drivers/staging/vc04_services/bcm2835-codec/bcm2835-v4l2-codec.c>kernel source</a>
+was invaluable to figure out why error codes were being returned.<ul><li>An <code>ENOSYS</code> error code is not helpful when it is implementation specific&mldr;</li></ul></li><li>I discovered quite late in the project that loading the <code>bcm2835_codec</code> kernel
+module with debugging turned on (by setting the parameter <code>debug=3</code>) allowed
+visibility into log messages which I could cross reference with the kernel
+sources.<ul><li>This would have saved a bunch of time if I&rsquo;d known this at the start</li></ul></li><li>Looking at <code>strace</code> of ffmpeg trying to encode the same video as my program
+allowed me to see if there was any hidden or different syscalls.<ul><li>Instead of an explicit error being returned, I would sometimes end up being
+unable to dequeue a capture or output frame, hanging ustreamer.</li><li>This included several times when I had missed a required field in a setup
+ioctl and when I had messed up the order of the queue/dequeue loop.</li></ul></li></ul><p><strong>Conclusion</strong></p><p>Hopefully, this article has showed how to approach doing video encoding on the
+Raspberry Pi from first principles. I&rsquo;ve also tried to give an overview of the
+V4L2 API; the beauty of a standard API means much of what I&rsquo;ve said here is not
+specific to the Pi but could be reused on any number of situations.</p><p>There is a lot more interesting ground I could have covered including
+non-blocking streaming, DMA and draining the encoder but this post has already
+run long enough&mldr;</p></section><nav class="mt-24 flex overflow-hidden rounded-xl bg-black/[3%] text-lg leading-[1.2]! *:flex *:w-1/2 *:items-center *:p-5 *:font-medium *:no-underline dark:bg-white/[8%] [&>*:hover]:bg-black/[2%] dark:[&>*:hover]:bg-white/[3%]"><a class="ltr:pr-3 rtl:pl-3" href=/llm-motivation-via-emotions/><span class="ltr:mr-1.5 rtl:ml-1.5">←</span><span>Harnessing Frustration: Using LLMs to Overcome Activation Energy</span></a></nav></article></main><footer class="mx-auto flex h-[4.5rem] max-w-(--w) items-center px-8 text-xs tracking-wider uppercase opacity-60"><div class=mr-auto>&copy;2025
+<a class=link href=/>Lalit Maganti</a></div><a class="link mx-6" href=https://gohugo.io/ rel=noopener target=_blank>powered by hugo️️</a>️
+<a class=link href=https://github.com/nanxiaobei/hugo-paper rel=noopener target=_blank>hugo-paper</a></footer></body></html>

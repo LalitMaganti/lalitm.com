@@ -1,31 +1,4 @@
-<!doctype html>
-
-
-
-
-
-
-
-<html
-  class="not-ready lg:text-base"
-  style="--bg:#faf8f1"
-  lang="en"
-  dir="ltr"
-><head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, shrink-to-fit=no"
-  />
-
-  
-  <title>What Makes a Good Tool for Claude Code - Lalit Maganti</title>
-
-  
-  <meta name="theme-color" />
-
-  <meta name="description" content="I&rsquo;ve been using Claude Code extensively for personal projects, and similar AI
+<!doctype html><html class="not-ready lg:text-base" style=--bg:#faf8f1 lang=en dir=ltr><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>What Makes a Good Tool for Claude Code - Lalit Maganti</title><meta name=theme-color><meta name=description content="I&rsquo;ve been using Claude Code extensively for personal projects, and similar AI
 coding tools at work. Recently I came across
 this excellent blog post
 that resonated with a lot of my experience.
@@ -34,283 +7,53 @@ they&rsquo;re &ldquo;overly complex,&rdquo; with the Unix philosophy being parti
 well-suited for tool calling. But then I thought about git.
 Git breaks the Unix philosophy completely. It&rsquo;s sprawling, stateful, and
 complex. And yet Claude Code handles it effortlessly. It composes commands that,
-even after 10&#43; years of daily git usage, I wouldn&rsquo;t think to use. It handles
+even after 10+ years of daily git usage, I wouldn&rsquo;t think to use. It handles
 rebasing, cherry-picking, complex resets—stuff that trips up experienced
-developers regularly." />
-  <meta name="author" content="Lalit Maganti" /><link rel="preload stylesheet" as="style" href="/main.min.css" />
-
-  <style>
-    article {
-      font-size: 0.9375rem !important;
-      line-height: 1.6 !important;
-    }
-    article header h1,
-    article > header > h1,
-    article > h1 {
-      font-size: 1rem !important;
-      line-height: 1.6 !important;
-      font-weight: 700 !important;
-    }
-    article h1 a {
-      font-weight: 700 !important;
-    }
-    main.prose > *:first-child,
-    main.prose > *:first-child > *:first-child {
-      margin-top: 0 !important;
-    }
-    main {
-      padding-top: 1rem !important;
-    }
-  </style>
-
-  
-  <link rel="preload" as="image" href="/theme.png" />
-
-  
-
-  <link rel="preload" as="image" href="/github.svg" /><link rel="preload" as="image" href="/linkedin.svg" /><link rel="preload" as="image" href="/rss.svg" />
-
-  <script
-    defer
-    src="/highlight.min.js"
-    onload="hljs.initHighlightingOnLoad();"
-  ></script>
-
-  
-  <link
-    rel="icon"
-    href="/favicon.ico"
-  />
-  <link
-    rel="apple-touch-icon"
-    href="/apple-touch-icon.png"
-  />
-
-  <meta name="generator" content="Hugo 0.148.1">
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPF1NN7N28"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-CPF1NN7N28');
-        }
-      </script>
-  <meta itemprop="name" content="What Makes a Good Tool for Claude Code">
-  <meta itemprop="description" content="I’ve been using Claude Code extensively for personal projects, and similar AI coding tools at work. Recently I came across this excellent blog post that resonated with a lot of my experience.
+developers regularly."><meta name=author content="Lalit Maganti"><link rel="preload stylesheet" as=style href=/main.min.css><style>article{font-size:.9375rem!important;line-height:1.6!important}article header h1,article>header>h1,article>h1{font-size:1rem!important;line-height:1.6!important;font-weight:700!important}article h1 a{font-weight:700!important}main.prose>*:first-child,main.prose>*:first-child>*:first-child{margin-top:0!important}main{padding-top:1rem!important}</style><link rel=preload as=image href=/theme.png><link rel=preload as=image href=/github.svg><link rel=preload as=image href=/linkedin.svg><link rel=preload as=image href=/rss.svg><script defer src=/highlight.min.js onload=hljs.initHighlightingOnLoad()></script><link rel=icon href=/favicon.ico><link rel=apple-touch-icon href=/apple-touch-icon.png><meta name=generator content="Hugo 0.151.0"><script async src="https://www.googletagmanager.com/gtag/js?id=G-CPF1NN7N28"></script><script>var dnt,doNotTrack=!1;if(!1&&(dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes"),!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-CPF1NN7N28")}</script><meta itemprop=name content="What Makes a Good Tool for Claude Code"><meta itemprop=description content="I’ve been using Claude Code extensively for personal projects, and similar AI coding tools at work. Recently I came across this excellent blog post that resonated with a lot of my experience.
 One part stuck with me though: Noah emphasizes that tools fail with LLMs when they’re “overly complex,” with the Unix philosophy being particularly well-suited for tool calling. But then I thought about git.
-Git breaks the Unix philosophy completely. It’s sprawling, stateful, and complex. And yet Claude Code handles it effortlessly. It composes commands that, even after 10&#43; years of daily git usage, I wouldn’t think to use. It handles rebasing, cherry-picking, complex resets—stuff that trips up experienced developers regularly.">
-  <meta itemprop="datePublished" content="2025-10-12T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2025-10-12T00:00:00+00:00">
-  <meta itemprop="wordCount" content="543"><meta property="og:url" content="/writing-tools-for-claude-code/">
-  <meta property="og:site_name" content="Lalit Maganti">
-  <meta property="og:title" content="What Makes a Good Tool for Claude Code">
-  <meta property="og:description" content="I’ve been using Claude Code extensively for personal projects, and similar AI coding tools at work. Recently I came across this excellent blog post that resonated with a lot of my experience.
+Git breaks the Unix philosophy completely. It’s sprawling, stateful, and complex. And yet Claude Code handles it effortlessly. It composes commands that, even after 10+ years of daily git usage, I wouldn’t think to use. It handles rebasing, cherry-picking, complex resets—stuff that trips up experienced developers regularly."><meta itemprop=datePublished content="2025-10-12T00:00:00+00:00"><meta itemprop=dateModified content="2025-10-12T00:00:00+00:00"><meta itemprop=wordCount content="567"><meta property="og:url" content="/writing-tools-for-claude-code/"><meta property="og:site_name" content="Lalit Maganti"><meta property="og:title" content="What Makes a Good Tool for Claude Code"><meta property="og:description" content="I’ve been using Claude Code extensively for personal projects, and similar AI coding tools at work. Recently I came across this excellent blog post that resonated with a lot of my experience.
 One part stuck with me though: Noah emphasizes that tools fail with LLMs when they’re “overly complex,” with the Unix philosophy being particularly well-suited for tool calling. But then I thought about git.
-Git breaks the Unix philosophy completely. It’s sprawling, stateful, and complex. And yet Claude Code handles it effortlessly. It composes commands that, even after 10&#43; years of daily git usage, I wouldn’t think to use. It handles rebasing, cherry-picking, complex resets—stuff that trips up experienced developers regularly.">
-  <meta property="og:locale" content="en">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2025-10-12T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-10-12T00:00:00+00:00">
-
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="What Makes a Good Tool for Claude Code">
-  <meta name="twitter:description" content="I’ve been using Claude Code extensively for personal projects, and similar AI coding tools at work. Recently I came across this excellent blog post that resonated with a lot of my experience.
+Git breaks the Unix philosophy completely. It’s sprawling, stateful, and complex. And yet Claude Code handles it effortlessly. It composes commands that, even after 10+ years of daily git usage, I wouldn’t think to use. It handles rebasing, cherry-picking, complex resets—stuff that trips up experienced developers regularly."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2025-10-12T00:00:00+00:00"><meta property="article:modified_time" content="2025-10-12T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="What Makes a Good Tool for Claude Code"><meta name=twitter:description content="I’ve been using Claude Code extensively for personal projects, and similar AI coding tools at work. Recently I came across this excellent blog post that resonated with a lot of my experience.
 One part stuck with me though: Noah emphasizes that tools fail with LLMs when they’re “overly complex,” with the Unix philosophy being particularly well-suited for tool calling. But then I thought about git.
-Git breaks the Unix philosophy completely. It’s sprawling, stateful, and complex. And yet Claude Code handles it effortlessly. It composes commands that, even after 10&#43; years of daily git usage, I wouldn’t think to use. It handles rebasing, cherry-picking, complex resets—stuff that trips up experienced developers regularly.">
-
-  <link rel="canonical" href="/writing-tools-for-claude-code/" />
-</head>
-<body
-    class="bg-(--bg) text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white"
-  ><header
-  class="mx-auto flex h-[4.5rem] max-w-(--w) px-8 whitespace-nowrap lg:justify-center"
->
-  <div class="relative z-50 flex items-center ltr:mr-auto rtl:ml-auto">
-    <a
-      class="-translate-y-[1px] text-2xl font-medium"
-      href="/"
-      >Lalit Maganti</a
-    >
-    <div
-      class="btn-dark text-[0px] ltr:ml-4 rtl:mr-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.png)_left_center/_auto_theme('spacing.6')_no-repeat] [transition:_background-position_0.4s_steps(5)] dark:[background-position:right]"
-      role="button"
-      aria-label="Dark"
-    ></div>
-  </div>
-
-  <div
-    class="btn-menu relative z-50 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden ltr:-mr-8 rtl:-ml-8"
-    role="button"
-    aria-label="Menu"
-  ></div>
-
-  <script>
-    
-    const htmlClass = document.documentElement.classList;
-    setTimeout(() => {
-      htmlClass.remove('not-ready');
-    }, 10);
-
-    
-    const btnMenu = document.querySelector('.btn-menu');
-    btnMenu.addEventListener('click', () => {
-      htmlClass.toggle('open');
-    });
-
-    
-    const metaTheme = document.querySelector('meta[name="theme-color"]');
-    const lightBg = '#faf8f1'.replace(/"/g, '');
-    const setDark = (isDark) => {
-      metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
-      htmlClass[isDark ? 'add' : 'remove']('dark');
-      localStorage.setItem('dark', isDark);
-    };
-
-    
-    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    if (htmlClass.contains('dark')) {
-      setDark(true);
-    } else {
-      const darkVal = localStorage.getItem('dark');
-      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
-    }
-
-    
-    darkScheme.addEventListener('change', (event) => {
-      setDark(event.matches);
-    });
-
-    
-    const btnDark = document.querySelector('.btn-dark');
-    btnDark.addEventListener('click', () => {
-      setDark(localStorage.getItem('dark') !== 'true');
-    });
-  </script>
-
-  <div
-    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-(--bg) pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none"
-  ><nav
-      class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-10 rtl:space-x-reverse"
-    ><a
-        class="block text-center text-xl leading-[5rem] lg:text-base lg:font-normal"
-        href="/page/about/"
-        >About</a
-      ></nav><nav
-      class="mt-12 flex justify-center space-x-10 lg:mt-0 lg:items-center ltr:lg:ml-14 rtl:space-x-reverse rtl:lg:mr-14 dark:invert"
-    >
-      <a
-        class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
-        style="--url: url(./github.svg)"
-        href="https://github.com/LalitMaganti"
-        target="_blank"
-        rel="me"
-      >github</a>
-      <a
-        class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
-        style="--url: url(./linkedin.svg)"
-        href="https://linkedin.com/in/lalit-maganti-18b73a9a"
-        target="_blank"
-        rel="me"
-      >linkedin</a>
-      <a
-        class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6"
-        style="--url: url(./rss.svg)"
-        href="/index.xml"
-        target="_blank"
-        rel="alternate"
-      >rss</a>
-    </nav>
-  </div>
-</header>
-<main
-      class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-0 pb-16"
-      style="margin-top: 0;"
-    ><article>
-  <header class="mb-4">
-    <h1 class="!mt-0 !mb-1 !text-base !font-bold">What Makes a Good Tool for Claude Code</h1><time class="block text-xs" style="margin-bottom: 0.5rem; opacity: 0.4;">Oct 12, 2025</time></header>
-
-  <section><p>I&rsquo;ve been using Claude Code extensively for personal projects, and similar AI
+Git breaks the Unix philosophy completely. It’s sprawling, stateful, and complex. And yet Claude Code handles it effortlessly. It composes commands that, even after 10+ years of daily git usage, I wouldn’t think to use. It handles rebasing, cherry-picking, complex resets—stuff that trips up experienced developers regularly."><link rel=canonical href=/writing-tools-for-claude-code/></head><body class="bg-(--bg) text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white"><header class="mx-auto flex h-[4.5rem] max-w-(--w) px-8 whitespace-nowrap lg:justify-center"><div class="relative z-50 flex items-center ltr:mr-auto rtl:ml-auto"><a class="-translate-y-[1px] text-2xl font-medium" href=/>Lalit Maganti</a><div class="btn-dark text-[0px] ltr:ml-4 rtl:mr-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.png)_left_center/_auto_theme('spacing.6')_no-repeat] [transition:_background-position_0.4s_steps(5)] dark:[background-position:right]" role=button aria-label=Dark></div></div><div class="btn-menu relative z-50 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden ltr:-mr-8 rtl:-ml-8" role=button aria-label=Menu></div><script>const htmlClass=document.documentElement.classList;setTimeout(()=>{htmlClass.remove("not-ready")},10);const btnMenu=document.querySelector(".btn-menu");btnMenu.addEventListener("click",()=>{htmlClass.toggle("open")});const metaTheme=document.querySelector('meta[name="theme-color"]'),lightBg="#faf8f1".replace(/"/g,""),setDark=e=>{metaTheme.setAttribute("content",e?"#000":lightBg),htmlClass[e?"add":"remove"]("dark"),localStorage.setItem("dark",e)},darkScheme=window.matchMedia("(prefers-color-scheme: dark)");if(htmlClass.contains("dark"))setDark(!0);else{const e=localStorage.getItem("dark");setDark(e?e==="true":darkScheme.matches)}darkScheme.addEventListener("change",e=>{setDark(e.matches)});const btnDark=document.querySelector(".btn-dark");btnDark.addEventListener("click",()=>{setDark(localStorage.getItem("dark")!=="true")})</script><div class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-(--bg) pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none"><nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-10 rtl:space-x-reverse"><a class="block text-center text-xl leading-[5rem] lg:text-base lg:font-normal" href=/page/about/>About</a></nav><nav class="mt-12 flex justify-center space-x-10 lg:mt-0 lg:items-center ltr:lg:ml-14 rtl:space-x-reverse rtl:lg:mr-14 dark:invert"><a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./github.svg) href=https://github.com/LalitMaganti target=_blank rel=me>github</a>
+<a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./linkedin.svg) href=https://linkedin.com/in/lalit-maganti-18b73a9a target=_blank rel=me>linkedin</a>
+<a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./rss.svg) href=/index.xml target=_blank rel=alternate>rss</a></nav></div></header><main class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-0 pb-16" style=margin-top:0><article><header class=mb-4><h1 class="!mt-0 !mb-1 !text-base !font-bold">What Makes a Good Tool for Claude Code</h1><time class="block text-xs" style=margin-bottom:.5rem;opacity:.4>Oct 12, 2025</time></header><section><p>I&rsquo;ve been using Claude Code extensively for personal projects, and similar AI
 coding tools at work. Recently I came across
-<a href="https://www.alephic.com/writing/the-magic-of-claude-code">this excellent blog post</a>
-that resonated with a lot of my experience.</p>
-<p>One part stuck with me though: Noah emphasizes that tools fail with LLMs when
+<a href=https://www.alephic.com/writing/the-magic-of-claude-code>this excellent blog post</a>
+that resonated with a lot of my experience.</p><p>One part stuck with me though: Noah emphasizes that tools fail with LLMs when
 they&rsquo;re &ldquo;overly complex,&rdquo; with the Unix philosophy being particularly
-well-suited for tool calling. But then I thought about <code>git</code>.</p>
-<p>Git breaks the Unix philosophy completely. It&rsquo;s sprawling, stateful, and
+well-suited for tool calling. But then I thought about <code>git</code>.</p><p>Git breaks the Unix philosophy completely. It&rsquo;s sprawling, stateful, and
 complex. And yet Claude Code handles it effortlessly. It composes commands that,
 even after 10+ years of daily git usage, I wouldn&rsquo;t think to use. It handles
 rebasing, cherry-picking, complex resets—stuff that trips up experienced
-developers regularly.</p>
-<p>So if simplicity and the Unix philosophy aren&rsquo;t the whole story, what else
-matters?</p>
-<p>I’ve come up with three “hallmarks” of a good tool for tool calling with LLMs.</p>
-<p><strong>1. It’s been around for a long time and/or is used by lots of people</strong></p>
-<p>Examples: Unix tools like <code>cat</code>, <code>sed</code>, <code>awk</code>, <code>grep</code>, <code>find</code>—but also <code>git</code>,
+developers regularly.</p><p>So if simplicity and the Unix philosophy aren&rsquo;t the whole story, what else
+matters?</p><p>I’ve come up with three “hallmarks” of a good tool for tool calling with LLMs.</p><p><strong>1. It’s been around for a long time and/or is used by lots of people</strong></p><p>Examples: Unix tools like <code>cat</code>, <code>sed</code>, <code>awk</code>, <code>grep</code>, <code>find</code>—but also <code>git</code>,
 <code>npm</code>, <code>docker</code>, <code>kubectl</code>. Every Stack Overflow thread, blog post, and tutorial
 using these tools has likely ended up in the training data. Claude isn’t
-reasoning from first principles—it’s drawing on millions of examples.</p>
-<p>This is why git works despite its complexity: Claude has effectively memorized
-decades of collective wisdom.</p>
-<p><strong>2. It has really good documentation (built-in help or external docs)</strong></p>
-<p>Even if a tool isn’t widely used, great documentation can bridge the gap. I’ve
+reasoning from first principles—it’s drawing on millions of examples.</p><p>This is why git works despite its complexity: Claude has effectively memorized
+decades of collective wisdom.</p><p><strong>2. It has really good documentation (built-in help or external docs)</strong></p><p>Even if a tool isn’t widely used, great documentation can bridge the gap. I’ve
 been building a finance system on top of
-<a href="https://beancount.github.io/docs/">Beancount</a>—a double-entry accounting system
+<a href=https://beancount.github.io/docs/>Beancount</a>—a double-entry accounting system
 that’s definitely not mainstream (maybe I’ll write a post about this in the
 future). Claude Code handles it surprisingly well because Beancount has
 exceptional documentation. When I point Claude at the docs, it can figure out
 the directive syntax, transaction formats, and account structures without
-necessarily having seen millions of examples in its training data.</p>
-<p>Good <code>--help</code> text matters. Clear external documentation matters. If Claude can
-discover how your tool works, it can use it effectively.</p>
-<p><strong>3. It has good error messages when something is wrong</strong></p>
-<p>Error messages, especially those with suggestions like “you used X, did you mean
+necessarily having seen millions of examples in its training data.</p><p>Good <code>--help</code> text matters. Clear external documentation matters. If Claude can
+discover how your tool works, it can use it effectively.</p><p><strong>3. Good error messages</strong></p><p>Error messages, especially those with suggestions like “you used X, did you mean
 Y?”, can be tremendously helpful for LLMs. The best example is the Rust
 compiler: it gives errors like “you typed foobar, did you mean foobaz?” and
-Claude Code can actually use that feedback to correct itself.</p>
-<p>This might be one reason why people feel Claude Code is particularly good at
+Claude Code can actually use that feedback to correct itself.</p><p>This might be one reason why people feel Claude Code is particularly good at
 Rust programming—the compiler is essentially coaching it through mistakes in
-real time.</p>
-<hr>
-<p>None of this is to say the Unix philosophy is wrong — it’s that Unix tools work
-well with Claude Code for different reasons than simplicity. Tools like <code>grep</code>
-and <code>cat</code> nail hallmarks 1 and 2: they’ve been around for decades (massive
-training data) and have extensive man pages (great documentation). The fact that
-they follow “do one thing well” is almost incidental to their success with LLMs.</p>
-<p>So if I’m building a tool today, I can’t make it instantly popular, but I can
+real time.</p><p>This isn’t to say the Unix philosophy is wrong — it’s that Unix tools work well
+with Claude Code for different reasons than we might think. Tools like sed and
+awk nail hallmarks 1 and 2: they’ve been around for decades (massive training
+data) and have extensive man pages (great documentation). The fact that they
+follow “do one thing well” is almost incidental to their success with LLMs.</p><p>So if I’m building a tool today, I can’t make it instantly popular, but I can
 make it understandable. That means good documentation, clear error messages, and
 a few solid examples of how it’s used. Those aren’t new ideas — they’ve always
-mattered. It’s just that, with LLMs in the mix, the payoff for doing them well
-is suddenly much higher.</p>
-</section>
-
-  <nav
-    class="mt-24 flex overflow-hidden rounded-xl bg-black/[3%] text-lg leading-[1.2]! *:flex *:w-1/2 *:items-center *:p-5 *:font-medium *:no-underline dark:bg-white/[8%] [&>*:hover]:bg-black/[2%] dark:[&>*:hover]:bg-white/[3%]"
-  ><a
-      class="justify-end pl-3 ltr:ml-auto rtl:mr-auto"
-      href="/llm-motivation-via-emotions/"
-      ><span>Harnessing Frustration: Using LLMs to Overcome Activation Energy</span><span class="ltr:ml-1.5 rtl:mr-1.5">→</span></a
-    ></nav></article></main><footer
-  class="mx-auto flex h-[4.5rem] max-w-(--w) items-center px-8 text-xs tracking-wider uppercase opacity-60"
->
-  <div class="mr-auto">&copy;2025
-    <a class="link" href="/">Lalit Maganti</a></div>
-  <a class="link mx-6" href="https://gohugo.io/" rel="noopener" target="_blank"
-    >powered by hugo️️</a
-  >️
-  <a
-    class="link"
-    href="https://github.com/nanxiaobei/hugo-paper"
-    rel="noopener"
-    target="_blank"
-    >hugo-paper</a
-  >
-</footer>
-</body>
-</html>
+mattered. The difference now is that there’s much higher ROI in doing them than
+there used to be.</p><p>In other words, we used to write docs for humans. Now, we’re also writing for
+AIs that help humans. That shift changes the economics of good documentation in
+a big way.</p></section><nav class="mt-24 flex overflow-hidden rounded-xl bg-black/[3%] text-lg leading-[1.2]! *:flex *:w-1/2 *:items-center *:p-5 *:font-medium *:no-underline dark:bg-white/[8%] [&>*:hover]:bg-black/[2%] dark:[&>*:hover]:bg-white/[3%]"><a class="justify-end pl-3 ltr:ml-auto rtl:mr-auto" href=/llm-motivation-via-emotions/><span>Harnessing Frustration: Using LLMs to Overcome Activation Energy</span><span class="ltr:ml-1.5 rtl:mr-1.5">→</span></a></nav></article></main><footer class="mx-auto flex h-[4.5rem] max-w-(--w) items-center px-8 text-xs tracking-wider uppercase opacity-60"><div class=mr-auto>&copy;2025
+<a class=link href=/>Lalit Maganti</a></div><a class="link mx-6" href=https://gohugo.io/ rel=noopener target=_blank>powered by hugo️️</a>️
+<a class=link href=https://github.com/nanxiaobei/hugo-paper rel=noopener target=_blank>hugo-paper</a></footer></body></html>
