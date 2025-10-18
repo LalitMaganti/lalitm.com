@@ -18,7 +18,7 @@ priorities shift</li></ul><p>The good news is that we just
 <a href=https://github.com/google/perfetto/pull/3273>landed</a> support for trace
 writers to specify explicitly how traces should be ordered with the JSON format
 in Perfetto without any extreme workarounds! This feature is already available on
-the &ldquo;Canary&rdquo; UI channel within a few days and on &ldquo;Stable&rdquo; within 3-4 weeks.</p><p><img src=/img/perfetto-oss-company-prio/perfetto-json-ordering.png alt="Json Track ordering in action!"></p><p style=text-align:center><i>process_sort_index and thread_sort_index are now respected by Perfetto!</i></p><p>So we solved the imediate problem! But here&rsquo;s what concerns me: I found this
+the &ldquo;Canary&rdquo; UI channel within a few days and on &ldquo;Stable&rdquo; within 3-4 weeks.</p><p><img src=/img/perfetto-json-ordering.png alt="Json Track ordering in action!"></p><p style=text-align:center><i>process_sort_index and thread_sort_index are now respected by Perfetto!</i></p><p>So we solved the imediate problem! But here&rsquo;s what concerns me: I found this
 issue totally by chance while browsing lobste.rs. There were several issues
 filed in the Perfetto repo over several years asking for this feature
 (<a href=https://github.com/google/perfetto/issues/555>#555</a>,
