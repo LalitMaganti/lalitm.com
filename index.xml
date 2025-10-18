@@ -1,4 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lalit Maganti</title><link>/</link><description>Recent content on Lalit Maganti</description><generator>Hugo</generator><language>en</language><lastBuildDate>Sun, 12 Oct 2025 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>What Makes a Good Tool for Claude Code</title><link>/writing-tools-for-claude-code/</link><pubDate>Sun, 12 Oct 2025 00:00:00 +0000</pubDate><guid>/writing-tools-for-claude-code/</guid><description>&lt;p&gt;I&amp;rsquo;ve been using Claude Code extensively for personal projects, and similar AI
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lalit Maganti</title><link>/</link><description>Recent content on Lalit Maganti</description><generator>Hugo</generator><language>en</language><lastBuildDate>Fri, 17 Oct 2025 15:00:00 +0100</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>On Perfetto, Open Source, and Company Priorities</title><link>/perfetto-oss-company-prio/</link><pubDate>Fri, 17 Oct 2025 15:00:00 +0100</pubDate><guid>/perfetto-oss-company-prio/</guid><description>&lt;p&gt;I recently stumbled across
+&lt;a href="https://lobste.rs/s/fl7ly9/traceboot_precise_lightweight_tracing"&gt;this post on lobste.rs&lt;/a&gt;
+about a project called
+&lt;a href="https://codeberg.org/SpecialSnowflake/traceboot"&gt;traceboot&lt;/a&gt; which allows
+visualizing the Linux boot process using lightweight ftrace events and Perfetto.
+The author had
+&lt;a href="https://codeberg.org/SpecialSnowflake/traceboot#woes-with-a-rant-and-ideas-last-paragraph-of-this-section"&gt;some commentary&lt;/a&gt;
+about their experience trying to order tracks in Perfetto:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Ordering tracks with perfetto has been ridiculously complicated. It has taken
+the majority of the time of this project! Upstream&amp;rsquo;s answers are basically
+that the main user is Android (Perfetto is a Google project) so others come
+second if at all. While I get the reasons to do so, I read that as a caution
+against depending on it as a third-party. Google is notorious for (&amp;hellip;)
+completely killing projects&lt;/p&gt;</description></item><item><title>What Makes a Good Tool for Claude Code</title><link>/writing-tools-for-claude-code/</link><pubDate>Sun, 12 Oct 2025 00:00:00 +0000</pubDate><guid>/writing-tools-for-claude-code/</guid><description>&lt;p&gt;I&amp;rsquo;ve been using Claude Code extensively for personal projects, and similar AI
 coding tools at work. Recently I came across
 &lt;a href="https://www.alephic.com/writing/the-magic-of-claude-code"&gt;this excellent blog post&lt;/a&gt;
 that resonated with a lot of my experience.&lt;/p&gt;
