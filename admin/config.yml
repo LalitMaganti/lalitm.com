@@ -10,7 +10,7 @@ backend:
 #   name: test-repo
 
 # Editorial workflow: drafts as pull requests
-publish_mode: editorial_workflow
+# publish_mode: editorial_workflow
 
 media_folder: "static/img"
 public_folder: "/img"
