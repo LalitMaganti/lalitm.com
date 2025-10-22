@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Lalit Maganti</title><link>/post/</link><description>Recent content in Posts on Lalit Maganti</description><generator>Hugo</generator><language>en</language><lastBuildDate>Sun, 19 Oct 2025 19:38:00 +0100</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml"/><item><title>TIL: The Documentation System (Divio)</title><link>/til-the-documentation-system-divio/</link><pubDate>Sun, 19 Oct 2025 19:38:00 +0100</pubDate><guid>/til-the-documentation-system-divio/</guid><description>&lt;p&gt;I, and the rest of the Perfetto team, spent a lot of time earlier this year rewriting the &lt;a href="docs.perfetto.dev"&gt;Perfetto documentation&lt;/a&gt; to be more useful for the average developer. As part of this we struggled a lot to figure out &amp;ldquo;what is the best way to structure our documentation&amp;rdquo;.&lt;/p&gt;
-&lt;p&gt;Today, when reading &lt;a href="https://rakhim.exotext.com/examples-are-the-best-documentation"&gt;Examples are the best documentation&lt;/a&gt;, I came across &lt;a href="https://docs.divio.com/documentation-system/"&gt;The Documentation System&lt;/a&gt;, an approach to structuring developer documentation. Reading through it, I couldn&amp;rsquo;t help but marvel at how clear and concisely it laid out the ideas we were struggling to come up with from first principles.&lt;/p&gt;</description></item><item><title>On Perfetto, Open Source, and Company Priorities</title><link>/perfetto-oss-company-prio/</link><pubDate>Fri, 17 Oct 2025 15:00:00 +0100</pubDate><guid>/perfetto-oss-company-prio/</guid><description>&lt;p&gt;I recently stumbled across
+&lt;p&gt;Today, when reading &lt;a href="https://rakhim.exotext.com/examples-are-the-best-documentation"&gt;Examples are the best documentation&lt;/a&gt;, I came across &lt;a href="https://docs.divio.com/documentation-system/"&gt;The Documentation System&lt;/a&gt;, an approach to structuring developer documentation. Reading through it, I couldn&amp;rsquo;t help but marvel at how clear and concisely it laid out the ideas we were struggling to come up with from first principles.&lt;/p&gt;
+&lt;p&gt;Specifically, I really like how it breaks down documentation into four quadrants:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="https://docs.divio.com/documentation-system/tutorials/"&gt;&lt;strong&gt;Tutorials&lt;/strong&gt;&lt;/a&gt;: take your user through a series of steps to complete some task with your project.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.divio.com/documentation-system/how-to-guides/"&gt;&lt;strong&gt;How-to guides&lt;/strong&gt;&lt;/a&gt;: solve a real world problem with your project.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.divio.com/documentation-system/reference/"&gt;&lt;strong&gt;Reference guides&lt;/strong&gt;&lt;/a&gt;: give technical explanations of how things work.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.divio.com/documentation-system/explanation/"&gt;&lt;strong&gt;Explanations&lt;/strong&gt;&lt;/a&gt;: clarify a particular topic or area and how the project fits into the bigger tech landscape.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I think we got &lt;em&gt;most&lt;/em&gt; of this right in our documentation rewrite but we definitely muddled some of these areas together, making our pages less clear than they could be. I plan on spending some time correcting our docs to match this system closer.&lt;/p&gt;</description></item><item><title>On Perfetto, Open Source, and Company Priorities</title><link>/perfetto-oss-company-prio/</link><pubDate>Fri, 17 Oct 2025 15:00:00 +0100</pubDate><guid>/perfetto-oss-company-prio/</guid><description>&lt;p&gt;I recently stumbled across
 &lt;a href="https://lobste.rs/s/fl7ly9/traceboot_precise_lightweight_tracing"&gt;this post on lobste.rs&lt;/a&gt;
 about a project called
 &lt;a href="https://codeberg.org/SpecialSnowflake/traceboot"&gt;traceboot&lt;/a&gt; which allows
@@ -13,7 +21,21 @@ the majority of the time of this project! Upstream&amp;rsquo;s answers are basic
 that the main user is Android (Perfetto is a Google project) so others come
 second if at all. While I get the reasons to do so, I read that as a caution
 against depending on it as a third-party. Google is notorious for (&amp;hellip;)
-completely killing projects&lt;/p&gt;</description></item><item><title>What Makes a Good Tool for Claude Code</title><link>/writing-tools-for-claude-code/</link><pubDate>Sun, 12 Oct 2025 00:00:00 +0000</pubDate><guid>/writing-tools-for-claude-code/</guid><description>&lt;p&gt;I&amp;rsquo;ve been using Claude Code extensively for personal projects, and similar AI
+completely killing projects&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Honestly? All of these points are right:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It is really unfortunate that doing something so simple took so much effort.&lt;/li&gt;
+&lt;li&gt;It&amp;rsquo;s true that external users are supported at a lower priority than Android
+users.&lt;/li&gt;
+&lt;li&gt;It&amp;rsquo;s also the case that Google has historically wound down projects when
+priorities shift&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The good news is that we just
+&lt;a href="https://github.com/google/perfetto/pull/3273"&gt;landed&lt;/a&gt; support for trace
+writers to specify explicitly how traces should be ordered with the JSON format
+in Perfetto without any extreme workarounds! This feature is already available on
+the &amp;ldquo;Canary&amp;rdquo; UI channel and on &amp;ldquo;Stable&amp;rdquo; within 3-4 weeks.&lt;/p&gt;</description></item><item><title>What Makes a Good Tool for Claude Code</title><link>/writing-tools-for-claude-code/</link><pubDate>Sun, 12 Oct 2025 00:00:00 +0000</pubDate><guid>/writing-tools-for-claude-code/</guid><description>&lt;p&gt;I&amp;rsquo;ve been using Claude Code extensively for personal projects, and similar AI
 coding tools at work. Recently I came across
 &lt;a href="https://www.alephic.com/writing/the-magic-of-claude-code"&gt;this excellent blog post&lt;/a&gt;
 that resonated with a lot of my experience.&lt;/p&gt;
@@ -24,12 +46,40 @@ well-suited for tool calling. But then I thought about &lt;code&gt;git&lt;/code&
 complex. And yet Claude Code handles it effortlessly. It composes commands that,
 even after 10+ years of daily git usage, I wouldn&amp;rsquo;t think to use. It handles
 rebasing, cherry-picking, complex resets—stuff that trips up experienced
-developers regularly.&lt;/p&gt;</description></item><item><title>Harnessing Frustration: Using LLMs to Overcome Activation Energy</title><link>/llm-motivation-via-emotions/</link><pubDate>Mon, 14 Jul 2025 00:00:00 +0000</pubDate><guid>/llm-motivation-via-emotions/</guid><description>&lt;p&gt;One of my biggest weaknesses as a software engineer is procrastination when
+developers regularly.&lt;/p&gt;
+&lt;p&gt;So if simplicity and the Unix philosophy aren&amp;rsquo;t the whole story, what else
+matters?&lt;/p&gt;
+&lt;p&gt;I’ve come up with three “hallmarks” of a good tool for tool calling with LLMs.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1. It’s been around for a long time and/or is used by lots of people&lt;/strong&gt;&lt;/p&gt;</description></item><item><title>Harnessing Frustration: Using LLMs to Overcome Activation Energy</title><link>/llm-motivation-via-emotions/</link><pubDate>Mon, 14 Jul 2025 00:00:00 +0000</pubDate><guid>/llm-motivation-via-emotions/</guid><description>&lt;p&gt;One of my biggest weaknesses as a software engineer is procrastination when
 facing a new project. When the scope is unclear, I have a tendency to wait until
 I feel I&amp;rsquo;ve &amp;ldquo;felt out&amp;rdquo; the problem to start doing anything. I know I&amp;rsquo;ll feel
 better and work much faster when I get &amp;ldquo;stuck in&amp;rdquo; but I still struggle with that
 first step, overcoming the &amp;ldquo;activation energy&amp;rdquo; required to engage with the
-details.&lt;/p&gt;</description></item><item><title>V4L2 and Hardware Encoding on the Raspberry Pi</title><link>/hw-encoding-raspi/</link><pubDate>Mon, 01 Feb 2021 23:00:00 +0000</pubDate><guid>/hw-encoding-raspi/</guid><description>&lt;p&gt;&lt;strong&gt;TLDR&lt;/strong&gt;: Explain how the V4L2 M2M API works through the use-case of
+details.&lt;/p&gt;
+&lt;p&gt;LLMs have been a game-changer for me in this respect: I can just throw a couple
+of sentences at them with the shape of the problem. This leads to one of two
+outcomes:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The LLM comes up with a good solution, usually in a slightly different way
+than what I was thinking. I realize &amp;ldquo;oh wow the solution is much simpler than
+I thought&amp;rdquo;. Straight away I start thinking about the consequences of
+implementing and improving what the LLM suggested.&lt;/li&gt;
+&lt;li&gt;The LLM comes up with a solution that I intuitively recognize as &amp;ldquo;wrong&amp;rdquo;. My
+immediate reaction is frustration (&amp;ldquo;How could it get it so wrong&amp;rdquo;) which
+leads me to go back and forth with the model, explaining to it why its
+solution could not &lt;em&gt;possibly&lt;/em&gt; work. But in the process of arguing with the
+model, my brain is churning away and generating variations or different
+approaches that &lt;em&gt;could&lt;/em&gt; work. After a while, even if the AI is still on the
+wrong track, the debate will trigger a moment of inspiration where suddenly
+the solution will come to me. I&amp;rsquo;ll excitedly start up a new conversation and
+start working through it with the model.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The key is the emotional reaction I have immediately to the LLM&amp;rsquo;s response,
+either &lt;strong&gt;excitement or frustration&lt;/strong&gt;. By harnessing this immediate feedback
+loop, I get my brain out of its passive, procrastination mode. It&amp;rsquo;s almost like
+a jolt: either I&amp;rsquo;m thrilled because it&amp;rsquo;s simpler than I thought, or I&amp;rsquo;m spurred
+to action by the urge to correct a perceived &amp;lsquo;wrong&amp;rsquo; answer. This forces me to
+engage with the problem in a meaningful way.&lt;/p&gt;</description></item><item><title>V4L2 and Hardware Encoding on the Raspberry Pi</title><link>/hw-encoding-raspi/</link><pubDate>Mon, 01 Feb 2021 23:00:00 +0000</pubDate><guid>/hw-encoding-raspi/</guid><description>&lt;p&gt;&lt;strong&gt;TLDR&lt;/strong&gt;: Explain how the V4L2 M2M API works through the use-case of
 implementing hardware video encoding on the Raspberry Pi. This knowledge is
 generally useful as V4L2 is the de-facto generic API for hardware decoding and
 encoding on Linux.&lt;/p&gt;
@@ -43,4 +93,9 @@ IP which runs on a Raspberry Pi. Behind the scenes, TinyPilot uses
 &lt;a href="https://github.com/pikvm/ustreamer"&gt;ustreamer&lt;/a&gt; to read frames from a HDMI
 capture card and either exposes it over HTTP or writes it to shared memory.
 Along with the MJPEG output, support was recently added for encoding video using
-H264.&lt;/p&gt;</description></item></channel></rss>
+H264.&lt;/p&gt;
+&lt;p&gt;Even after messing with the source code, I could not get the H264 encoding
+working on my Pi running 64-bit Ubuntu with an error message of
+&lt;code&gt;Can't create MMAL wrapper&lt;/code&gt;. Digging further, I ran into some insurmountable
+roadblocks with the approach taken by ustreamer and discovered the complex state
+of hardware encoding on the Pi.&lt;/p&gt;</description></item></channel></rss>
