@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on Lalit Maganti</title><link>https://lalitm.com/page/</link><description>Recent content in Pages on Lalit Maganti</description><generator>Hugo</generator><language>en</language><lastBuildDate>Sun, 02 Nov 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://lalitm.com/page/index.xml" rel="self" type="application/rss+xml"/><item><title>Archive</title><link>https://lalitm.com/page/archive/</link><pubDate>Sun, 02 Nov 2025 00:00:00 +0000</pubDate><guid>https://lalitm.com/page/archive/</guid><description/></item><item><title>About</title><link>https://lalitm.com/page/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://lalitm.com/page/about/</guid><description>&lt;p&gt;I&amp;rsquo;m a Senior Staff Software Engineer at Google working on
+&lt;a href="https://perfetto.dev"&gt;Perfetto&lt;/a&gt;, an open source suite of tools for performance
+tracing and analysis. I joined Perfetto as a founding engineer in 2017 and
+have been part of the project ever since.&lt;/p&gt;
+&lt;p&gt;Perfetto is the default tracing system for Android and Chrome, and is now used
+by companies like Meta and Microsoft, as well as in open source projects
+like QEMU, Mesa and the Linux kernel. My work focuses on trace analysis
+tools — particularly the PerfettoSQL language and its query engine — and championing
+the use of Perfetto by open source projects and the industry more broadly.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m passionate about performance and open-source and especially the intersection
+of those two domains. I&amp;rsquo;m also generally interested in AI/LLMs and how they are
+changing the software engineering industry.&lt;/p&gt;
+&lt;p&gt;Before Google, in my spare time, I contributed to Android custom ROMs (e.g. CyanogenMod,
+OmniROM) and built open source Android applications, the most successful being an IRC
+client called &lt;a href="https://github.com/Lalitmaganti/HoloIRC"&gt;HoloIRC&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>Subscribe</title><link>https://lalitm.com/page/subscribe/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://lalitm.com/page/subscribe/</guid><description>&lt;p&gt;You can subscribe to my blog via email newsletter or using RSS feeds.&lt;/p&gt;
+&lt;h2 id="weekly-ish-newsletter"&gt;Weekly-ish newsletter&lt;/h2&gt;
+&lt;p&gt;I send out &lt;a href="https://lalitm.substack.com/"&gt;a free newsletter&lt;/a&gt; rounding up recent posts
+once every week or two. You can subscribe to that here:&lt;/p&gt;
+&lt;div class="newsletter-embed"&gt;
+ &lt;iframe src="https://lalitm.substack.com/embed"
+ width="100%"
+ height="320"
+ frameborder="0"
+ scrolling="no"&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;h2 id="rss-feed"&gt;RSS feed&lt;/h2&gt;
+&lt;p&gt;You can subscribe via RSS at
+&lt;a href="https://lalitm.com/index.xml"&gt;https://lalitm.com/index.xml&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>

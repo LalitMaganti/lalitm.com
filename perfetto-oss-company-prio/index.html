@@ -1,0 +1,124 @@
+<!doctype html><html class="not-ready lg:text-base" lang=en dir=ltr><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>On Perfetto, Open Source, and Company Priorities - Lalit Maganti</title><meta name=theme-color><meta name=description content="Discussed on lobste.rs here.
+I recently stumbled across
+this post on lobste.rs
+about a project called
+traceboot which allows
+visualizing the Linux boot process using lightweight ftrace events and Perfetto.
+The author had
+some commentary
+about their experience trying to order tracks in Perfetto:
+
+Ordering tracks with perfetto has been ridiculously complicated. It has taken
+the majority of the time of this project! Upstream&rsquo;s answers are basically
+that the main user is Android (Perfetto is a Google project) so others come
+second if at all. While I get the reasons to do so, I read that as a caution
+against depending on it as a third-party. Google is notorious for (&mldr;)
+completely killing projects
+
+Honestly? All of these points are right:
+
+It is really unfortunate that doing something so simple took so much effort.
+It&rsquo;s true that external users are supported at a lower priority than Android
+users.
+It&rsquo;s also the case that Google has historically wound down projects when
+priorities shift
+
+The good news is that we just
+landed support for trace
+writers to specify explicitly how traces should be ordered with the JSON format
+in Perfetto without any extreme workarounds! This feature is already available on
+the &ldquo;Canary&rdquo; UI channel and on &ldquo;Stable&rdquo; within 3-4 weeks."><meta name=author content="Lalit Maganti"><link rel="preload stylesheet" as=style href=https://lalitm.com/main.min.css><link rel=preload as=image href=https://lalitm.com/theme.png><link rel=preload as=image href=https://lalitm.com/github.svg><link rel=preload as=image href=https://lalitm.com/linkedin.svg><link rel=preload as=image href=https://lalitm.com/rss.svg><script defer src=https://lalitm.com/highlight.min.js onload=hljs.initHighlightingOnLoad()></script><link rel=icon href=https://lalitm.com/favicon.ico><link rel=apple-touch-icon href=https://lalitm.com/apple-touch-icon.png><meta name=generator content="Hugo 0.152.2"><link rel=preconnect href=https://www.googletagmanager.com crossorigin><link rel=dns-prefetch href=https://www.google-analytics.com><script async src="https://www.googletagmanager.com/gtag/js?id=G-CPF1NN7N28"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-CPF1NN7N28",{anonymize_ip:!0,cookie_flags:"SameSite=None;Secure"})</script><meta itemprop=name content="On Perfetto, Open Source, and Company Priorities"><meta itemprop=description content="Discussed on lobste.rs here.
+I recently stumbled across this post on lobste.rs about a project called traceboot which allows visualizing the Linux boot process using lightweight ftrace events and Perfetto. The author had some commentary about their experience trying to order tracks in Perfetto:
+Ordering tracks with perfetto has been ridiculously complicated. It has taken the majority of the time of this project! Upstream’s answers are basically that the main user is Android (Perfetto is a Google project) so others come second if at all. While I get the reasons to do so, I read that as a caution against depending on it as a third-party. Google is notorious for (…) completely killing projects
+Honestly? All of these points are right:
+It is really unfortunate that doing something so simple took so much effort. It’s true that external users are supported at a lower priority than Android users. It’s also the case that Google has historically wound down projects when priorities shift The good news is that we just landed support for trace writers to specify explicitly how traces should be ordered with the JSON format in Perfetto without any extreme workarounds! This feature is already available on the “Canary” UI channel and on “Stable” within 3-4 weeks."><meta itemprop=datePublished content="2025-10-17T15:00:00+01:00"><meta itemprop=dateModified content="2025-10-17T15:00:00+01:00"><meta itemprop=wordCount content="1076"><meta itemprop=keywords content="Perfetto,Open-Source"><meta property="og:url" content="https://lalitm.com/perfetto-oss-company-prio/"><meta property="og:site_name" content="Lalit Maganti"><meta property="og:title" content="On Perfetto, Open Source, and Company Priorities"><meta property="og:description" content="Discussed on lobste.rs here.
+I recently stumbled across this post on lobste.rs about a project called traceboot which allows visualizing the Linux boot process using lightweight ftrace events and Perfetto. The author had some commentary about their experience trying to order tracks in Perfetto:
+Ordering tracks with perfetto has been ridiculously complicated. It has taken the majority of the time of this project! Upstream’s answers are basically that the main user is Android (Perfetto is a Google project) so others come second if at all. While I get the reasons to do so, I read that as a caution against depending on it as a third-party. Google is notorious for (…) completely killing projects
+Honestly? All of these points are right:
+It is really unfortunate that doing something so simple took so much effort. It’s true that external users are supported at a lower priority than Android users. It’s also the case that Google has historically wound down projects when priorities shift The good news is that we just landed support for trace writers to specify explicitly how traces should be ordered with the JSON format in Perfetto without any extreme workarounds! This feature is already available on the “Canary” UI channel and on “Stable” within 3-4 weeks."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2025-10-17T15:00:00+01:00"><meta property="article:modified_time" content="2025-10-17T15:00:00+01:00"><meta property="article:tag" content="Perfetto"><meta property="article:tag" content="Open-Source"><meta name=twitter:card content="summary"><meta name=twitter:title content="On Perfetto, Open Source, and Company Priorities"><meta name=twitter:description content="Discussed on lobste.rs here.
+I recently stumbled across this post on lobste.rs about a project called traceboot which allows visualizing the Linux boot process using lightweight ftrace events and Perfetto. The author had some commentary about their experience trying to order tracks in Perfetto:
+Ordering tracks with perfetto has been ridiculously complicated. It has taken the majority of the time of this project! Upstream’s answers are basically that the main user is Android (Perfetto is a Google project) so others come second if at all. While I get the reasons to do so, I read that as a caution against depending on it as a third-party. Google is notorious for (…) completely killing projects
+Honestly? All of these points are right:
+It is really unfortunate that doing something so simple took so much effort. It’s true that external users are supported at a lower priority than Android users. It’s also the case that Google has historically wound down projects when priorities shift The good news is that we just landed support for trace writers to specify explicitly how traces should be ordered with the JSON format in Perfetto without any extreme workarounds! This feature is already available on the “Canary” UI channel and on “Stable” within 3-4 weeks."><link rel=canonical href=https://lalitm.com/perfetto-oss-company-prio/></head><body class="text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white"><header class="mx-auto flex h-[4.5rem] max-w-(--w) px-8 whitespace-nowrap lg:justify-center"><div class="relative z-50 flex items-center ltr:mr-auto rtl:ml-auto"><a class="-translate-y-[1px] text-2xl font-medium" href=https://lalitm.com/>Lalit Maganti</a></div><div class="btn-menu relative z-50 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden ltr:-mr-8 rtl:-ml-8" role=button aria-label=Menu></div><script>const htmlClass=document.documentElement.classList;setTimeout(()=>{htmlClass.remove("not-ready")},10);const btnMenu=document.querySelector(".btn-menu");btnMenu.addEventListener("click",()=>{htmlClass.toggle("open")});const metaTheme=document.querySelector('meta[name="theme-color"]');metaTheme.setAttribute("content","#000"),htmlClass.add("dark")</script><div class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-(--bg) pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none"><nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center rtl:space-x-reverse header-nav"><a class="block text-center text-xl leading-[5rem] lg:text-base lg:font-normal" href=/page/about/>About</a><a class="block text-center text-xl leading-[5rem] lg:text-base lg:font-normal" href=/page/archive/>Archive</a><a class="block text-center text-xl leading-[5rem] lg:text-base lg:font-normal" href=/page/subscribe/>Subscribe</a></nav><nav class="mt-12 flex justify-center space-x-10 lg:mt-0 lg:items-center ltr:lg:ml-14 rtl:space-x-reverse rtl:lg:mr-14 dark:invert"><a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./github.svg) href=https://github.com/LalitMaganti target=_blank rel=me>github</a>
+<a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./linkedin.svg) href=https://linkedin.com/in/lalit-maganti-18b73a9a target=_blank rel=me>linkedin</a>
+<a class="h-7 w-7 text-[0px] [background:var(--url)_center_center/cover_no-repeat] lg:h-6 lg:w-6" style=--url:url(./rss.svg) href=https://lalitm.com/index.xml target=_blank rel=alternate>rss</a></nav></div></header><main class="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-(--w) px-8 pt-0 pb-16 main-content"><article><header class=mb-4><h1 class="!mt-0 !mb-1 !text-base !font-bold">On Perfetto, Open Source, and Company Priorities</h1><time class="block text-xs post-date">Oct 17, 2025</time></header><section><p><em>Discussed on lobste.rs <a href=https://lobste.rs/s/chaivl/on_perfetto_open_source_company>here</a>.</em></p><p>I recently stumbled across
+<a href=https://lobste.rs/s/fl7ly9/traceboot_precise_lightweight_tracing>this post on lobste.rs</a>
+about a project called
+<a href=https://codeberg.org/SpecialSnowflake/traceboot>traceboot</a> which allows
+visualizing the Linux boot process using lightweight ftrace events and Perfetto.
+The author had
+<a href=https://codeberg.org/SpecialSnowflake/traceboot#woes-with-a-rant-and-ideas-last-paragraph-of-this-section>some commentary</a>
+about their experience trying to order tracks in Perfetto:</p><blockquote><p>Ordering tracks with perfetto has been ridiculously complicated. It has taken
+the majority of the time of this project! Upstream&rsquo;s answers are basically
+that the main user is Android (Perfetto is a Google project) so others come
+second if at all. While I get the reasons to do so, I read that as a caution
+against depending on it as a third-party. Google is notorious for (&mldr;)
+completely killing projects</p></blockquote><p>Honestly? All of these points are right:</p><ul><li>It is really unfortunate that doing something so simple took so much effort.</li><li>It&rsquo;s true that external users are supported at a lower priority than Android
+users.</li><li>It&rsquo;s also the case that Google has historically wound down projects when
+priorities shift</li></ul><p>The good news is that we just
+<a href=https://github.com/google/perfetto/pull/3273>landed</a> support for trace
+writers to specify explicitly how traces should be ordered with the JSON format
+in Perfetto without any extreme workarounds! This feature is already available on
+the &ldquo;Canary&rdquo; UI channel and on &ldquo;Stable&rdquo; within 3-4 weeks.</p><p><img src=/img/perfetto-json-ordering.png alt="Json Track ordering in action!"></p><p style=text-align:center><i>process_sort_index and thread_sort_index are now respected by Perfetto!</i></p><p>So we solved the imediate problem! But here&rsquo;s what concerns me: I found this
+issue totally by chance while browsing lobste.rs. There were several issues
+filed in the Perfetto repo over several years asking for this feature
+(<a href=https://github.com/google/perfetto/issues/555>#555</a>,
+<a href=https://github.com/google/perfetto/issues/764>#764</a>,
+<a href=https://github.com/google/perfetto/issues/378>#378</a>) but none of them managed
+to communicate to us just how painful this issue was and the lengths people were
+willing to go to work around it. Seeing the annoyance in such stark terms
+definitely put into perspective the importance of this feature.</p><p>You might be thinking: &ldquo;surely if a feature is requested that much, you should
+consider it important and work on fixing it&rdquo;. And for a general open source
+project, I&rsquo;d agree with you. But there are some unique challenges which come
+with being an open source project under the umbrella of a Big Tech company.</p><p>It&rsquo;s all about how the Perfetto team fits into Google. We&rsquo;re part of the Android
+Diagnostics organization whose mandate is to build tools and systems to
+root-cause problems on Android. Performance debugging would be impossible
+without a system-wide tracing tool like Perfetto (which is why we even exist at
+all!). But because we are funded by Android, it&rsquo;s also expected that we
+prioritise its needs.</p><p>However, I, and others in the team, also deeply believe in the mission of open
+source. We want to build something useful not just for Android engineers inside
+Google but for the broader community as a whole. That creates a tension we
+struggle with constantly: we value external users and their use cases, but the
+reality of our team&rsquo;s existence means Google&rsquo;s priorities often win out.</p><p>This tension is compounded by the fact that different types of users want
+fundamentally different things from Perfetto. If you use Perfetto purely as a
+trace viewer, the expectation is &ldquo;I write the trace file and the Perfetto UI
+should display exactly what I want&rdquo;. But Android OS and app developers expect
+&ldquo;Perfetto should intelligently figure out what is most important in my trace and
+highlight that to me.&rdquo;</p><p>In the early days of Perfetto, we took on a lot of technical debt to meet the
+immediate needs of Android developers. We built an &lsquo;intelligence&rsquo; layer that
+automatically reordered tracks based on Android-specific heuristics. This was
+great for our primary users, but it made it immensely difficult to later support
+features for the &lsquo;pure trace viewer&rsquo; use case, like manually ordering tracks via
+the JSON file, because the Android logic would always override it.</p><p>The good news is that over the past 12 months, we&rsquo;ve spent a lot of time trying
+to decouple the &ldquo;core&rdquo; layer of Perfetto UI from the &ldquo;intelligence&rdquo; layer for
+Android. This separation means we can now preserve the original intent from the
+trace format (like &ldquo;this track should be ordered here&rdquo;) all the way to the UI,
+rather than having it get lost or overridden by Android-specific heuristics
+along the way. This allows us to build features like JSON track ordering without
+creating impossible-to-maintain code that hurts us in the long run.</p><p>It’s also understandable that people worry about Google’s project longevity.
+Thankfully Perfetto&rsquo;s core design principles of a) being 100% open source b)
+fully client side significantly mitigate these risks. For example, running the
+Perfetto UI is as simple as cloning the repo, running
+<code>tools/install-build-deps --ui && ui/run-dev-server</code> and navigating to
+<code>localhost:10000</code>. The site is entirely static capable of being hosted anywhere.
+There is no &ldquo;backend server&rdquo; to be taken down, everything runs in your browser
+only. So if for some reason, if the Perfetto team was to disappear, it would be
+trivially easy to host it yourself or even fork the project completely and start
+maintaining it.</p><p>With all that said, here are my takeaways from this experience:</p><ol><li>There are still painpoints lurking in issues from the past that external
+users are still hitting today. We should maybe do a pass over historical bugs
+and figure out what issues are hiding there.</li><li>Moving forward, we need to be more transparent and communicative about <em>why</em>
+we&rsquo;re not prioritising a certain issue. I feel our terse replies about our
+priorities are giving misleading indications on the value we place on
+external users. Maybe we should also be more open about what we <em>are</em>
+prioritizing, even if that means we have to say &ldquo;we&rsquo;re not going to be able
+to do much for external users this quarter&rdquo;.</li><li>We also need to set up a regular routine for going through our bug tracker
+and checking &ldquo;has anything changed which now makes this bug possible&rdquo; and if
+so, we should follow up and post on the issue to make everyone aware of this
+and keep bugs up to date.</li></ol><p>Here&rsquo;s also where community help would be invaluable: if you&rsquo;re facing an issue
+with Perfetto, tell us on <a href=https://github.com/google/perfetto/issues/new>Github</a> or on our
+<a href=https://groups.google.com/g/perfetto-dev>mailing list</a>! Comment on old bugs if
+one already exists or file new ones if they don&rsquo;t. Bonus points if you can tell
+us why the issue is so painful for you and what you&rsquo;re doing to work around it
+if it&rsquo;s not fixed. The more information we have, the better judgement calls we
+can make on prioritization.</p></section><div class=post-metadata><a href=https://lalitm.com/perfetto-oss-company-prio/ class=hover:underline>#</a><span> 15:00</span><span> / </span><a href=https://lalitm.com/tags/perfetto class=hover:underline>#perfetto</a><span> </span><a href=https://lalitm.com/tags/open-source class=hover:underline>#open-source</a></div><div class="mt-8 border-t border-black/[20%] pt-6 dark:border-white/[20%]"><p class="text-sm opacity-60"><em>If you enjoyed this post, you can <a href=/page/subscribe/>subscribe</a> to my weekly roundup of recent posts, or follow via <a href=/index.xml>RSS</a>.</em></p></div><nav class="mt-12 flex overflow-hidden rounded-xl bg-black/[3%] text-lg leading-[1.2]! *:flex *:w-1/2 *:items-center *:p-5 *:font-medium *:no-underline dark:bg-white/[8%] [&>*:hover]:bg-black/[2%] dark:[&>*:hover]:bg-white/[3%]"><a class="ltr:pr-3 rtl:pl-3" href=https://lalitm.com/til-the-documentation-system-divio/><span class="ltr:mr-1.5 rtl:ml-1.5">←</span><span>TIL: The Documentation System (Divio)</span></a><a class="justify-end pl-3 ltr:ml-auto rtl:mr-auto" href=https://lalitm.com/writing-tools-for-claude-code/><span>What Makes a Good Tool for Claude Code</span><span class="ltr:ml-1.5 rtl:mr-1.5">→</span></a></nav></article></main><footer class="mx-auto flex h-[4.5rem] max-w-(--w) items-center px-8 text-xs tracking-wider uppercase opacity-60"><div class=mr-auto>&copy;2025
+<a class=link href=https://lalitm.com/>Lalit Maganti</a></div></footer></body></html>
