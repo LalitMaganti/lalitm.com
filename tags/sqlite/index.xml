@@ -3,7 +3,7 @@
 FROM foo
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;and ask me &amp;ldquo;Why is baz always an integer?! Have I hit an SQLite bug?&amp;rdquo;.&lt;/p&gt;
 &lt;p&gt;I have to again reach for my list of &amp;ldquo;odd quirks that SQLite has that people don&amp;rsquo;t know about&amp;rdquo;. Because this is &lt;em&gt;not&lt;/em&gt; a bug, at least according to the SQLite manual.&lt;/p&gt;
-&lt;p&gt;Instead, the correct way to write this is:&lt;/p&gt;
+&lt;p&gt;Instead, the correct way to write the above query is:&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;SELECT CAST(bar AS TEXT) AS baz
 FROM foo
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The reason for this? Quoting from &lt;a href="https://www.sqlite.org/datatype3.html#affname"&gt;&amp;ldquo;Determination of Column Affinity&amp;rdquo;&lt;/a&gt;&lt;/p&gt;
@@ -15,4 +15,7 @@ FROM foo
 &lt;li&gt;If the declared type for a column contains the string &amp;ldquo;BLOB&amp;rdquo; or if no type is specified then the column has affinity BLOB.&lt;/li&gt;
 &lt;li&gt;If the declared type for a column contains any of the strings &amp;ldquo;REAL&amp;rdquo;, &amp;ldquo;FLOA&amp;rdquo;, or &amp;ldquo;DOUB&amp;rdquo; then the column has REAL affinity.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Otherwise, the affinity is NUMERIC.&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;Otherwise, the affinity is NUMERIC.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;STRING&lt;/code&gt; does not match any of the numbered rules and so fallback to &lt;code&gt;NUMERIC&lt;/code&gt; affinity which, in the general case, means integer.&lt;/p&gt;
+&lt;p&gt;Due to SQLite&amp;rsquo;s staunch stance of being &amp;ldquo;backwards compatible&amp;rdquo; there&amp;rsquo;s very little chance of this paper-cut ever going away. But at least next time someone comes to me with this issue, I&amp;rsquo;ll be able to link to this post instead of writing the same thing for the nth time :)&lt;/p&gt;</description></item></channel></rss>
