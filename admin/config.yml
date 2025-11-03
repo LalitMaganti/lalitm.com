@@ -29,7 +29,8 @@ collections:
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DDTHH:mm:ssZ"}
       - {label: "Author", name: "author", widget: "string", default: "Lalit Maganti"}
-      - {label: "Draft", name: "draft", widget: "boolean", default: false, required: false}
+      - {label: "Draft", name: "draft", widget: "boolean", default: true, required: false}
+      - {label: "Tags", name: "tags", widget: "list", required: false}
       - {label: "Body", name: "body", widget: "markdown"}
 
   - name: "page"
@@ -41,5 +42,5 @@ collections:
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DDTHH:mm:ssZ"}
       - {label: "Author", name: "author", widget: "string", default: "Lalit Maganti"}
-      - {label: "Draft", name: "draft", widget: "boolean", default: false, required: false}
+      - {label: "Draft", name: "draft", widget: "boolean", default: true, required: false}
       - {label: "Body", name: "body", widget: "markdown"}
