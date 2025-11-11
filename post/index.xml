@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Lalit Maganti</title><link>https://lalitm.com/post/</link><description>Recent content in Posts on Lalit Maganti</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 03 Nov 2025 13:15:00 +0000</lastBuildDate><atom:link href="https://lalitm.com/post/index.xml" rel="self" type="application/rss+xml"/><item><title>CAST(x AS STRING) casts to integer in SQLite</title><link>https://lalitm.com/cast-x-as-string-casts-to-integer-in-sqlite/</link><pubDate>Mon, 03 Nov 2025 13:15:00 +0000</pubDate><guid>https://lalitm.com/cast-x-as-string-casts-to-integer-in-sqlite/</guid><description>&lt;p&gt;&lt;em&gt;This post was discussed on &lt;a href="https://lobste.rs/s/tqwmbn/cast_x_as_string_casts_integer_sqlite"&gt;lobste.rs&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;As an &amp;ldquo;SQLite consultant&amp;rdquo; for my local area of Google, I often have people come to me having written SQL like:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;SELECT&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;CAST&lt;/span&gt;(bar &lt;span style="color:#66d9ef"&gt;AS&lt;/span&gt; STRING) &lt;span style="color:#66d9ef"&gt;AS&lt;/span&gt; baz
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;FROM&lt;/span&gt; foo
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and ask me &amp;ldquo;Why is baz always an integer?! Have I hit an SQLite bug?&amp;rdquo;.&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;SELECT CAST(bar AS STRING) AS baz
+FROM foo
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;and ask me &amp;ldquo;Why is baz always an integer?! Have I hit an SQLite bug?&amp;rdquo;.&lt;/p&gt;
 &lt;p&gt;I have to again reach for my list of &amp;ldquo;odd quirks that SQLite has that people don&amp;rsquo;t know about&amp;rdquo;. Because this is &lt;em&gt;not&lt;/em&gt; a bug, at least according to the SQLite manual.&lt;/p&gt;
 &lt;p&gt;Instead, the correct way to write the above query is:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;SELECT&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;CAST&lt;/span&gt;(bar &lt;span style="color:#66d9ef"&gt;AS&lt;/span&gt; TEXT) &lt;span style="color:#66d9ef"&gt;AS&lt;/span&gt; baz
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;FROM&lt;/span&gt; foo
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The reason for this? Quoting from &lt;a href="https://www.sqlite.org/datatype3.html#affname"&gt;&amp;ldquo;Determination of Column Affinity&amp;rdquo;&lt;/a&gt;&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;SELECT CAST(bar AS TEXT) AS baz
+FROM foo
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The reason for this? Quoting from &lt;a href="https://www.sqlite.org/datatype3.html#affname"&gt;&amp;ldquo;Determination of Column Affinity&amp;rdquo;&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;For tables not declared as STRICT, the affinity of a column is determined by the declared type of the column, according to the following rules in the order shown:&lt;/p&gt;
 &lt;ol&gt;
